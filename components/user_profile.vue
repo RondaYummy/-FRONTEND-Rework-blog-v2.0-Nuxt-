@@ -21,7 +21,7 @@
       <!-- Для малих розмірів екрана можна використати замість нижніж -->
       <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
-      <v-app-bar-title>SALON_NAME </v-app-bar-title>
+      <v-app-bar-title>USER_NAME </v-app-bar-title>
 
       <v-spacer></v-spacer>
       <div class="text-center d-flex">
@@ -118,7 +118,7 @@ export default {
     mastersList,
   },
   data: () => ({
-    title: `Salon`,
+    title: `User`,
     items: [
       { title: "Click Me" },
       { title: "Click Me" },
@@ -126,7 +126,7 @@ export default {
       { title: "Click Me 2" },
     ],
     tab: null,
-    itemsMenu: ["Main", "Services", "Masters"],
+    itemsMenu: ["Main", "Friends", "Settings"],
     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veveniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
 
     length: 5,
@@ -138,9 +138,9 @@ export default {
       meta: [
         // hid is used as unique identifier. Do not use `vmid` for it as it will not work
         {
-          hid: "salon",
-          name: "salon",
-          content: "My custom salon",
+          hid: "user",
+          name: "user",
+          content: "My custom user",
         },
       ],
     };

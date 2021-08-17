@@ -43,9 +43,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.mainSection__user_profile{
-padding: 1rem;
-padding-left: 9rem;
-padding-right: 6rem;
+.mainSection__user_profile {
+  padding: 1rem;
+  padding-left: 9rem;
+  padding-right: 6rem;
 }
 </style>

@@ -32,8 +32,9 @@
 
           <p class="gaslo_main gaslo_main__for">
             Не знаєте що подарувати?
-            <span class="font-red">Подаруйте</span> живе спілкування із
-            «{{ title }}»
+            <span class="font-red">Подаруйте</span> живе спілкування із «{{
+              title
+            }}»
           </p>
         </section>
 
@@ -41,8 +42,8 @@
         <about-the-system />
 
         <div class="services__main_block">
-          <h3 class="text_tittle">станьте одним із нас </h3>
-          <section class="main_users" >
+          <h3 class="text_tittle">станьте одним із нас</h3>
+          <section class="main_users">
             <main_users />
             <main_users />
             <main_users />
@@ -76,6 +77,7 @@
 import main_users from "../components/main_users.vue";
 import aboutTheSystem from "../components/additional/aboutTheSystem.vue";
 import likedTheSystem from "../components/additional/likedTheSystem.vue";
+import { tittle } from "../config/default.json";
 
 export default {
   components: {
@@ -85,7 +87,7 @@ export default {
   },
   data: () => ({
     loading: false,
-    title: "NIKKI - BLOG",
+    title: tittle,
   }),
   methods: {
     getMoreServices() {

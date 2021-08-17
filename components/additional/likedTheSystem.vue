@@ -5,7 +5,9 @@
       <h2>Створи красу разом із нами!</h2>
     </div>
     <div class="info__section_right">
-      <button class="button" @click="$router.push('/registration')">Створити аккаунт</button>
+      <button class="button" @click="$router.push('/registration')">
+        Створити аккаунт
+      </button>
     </div>
   </section>
 </template>

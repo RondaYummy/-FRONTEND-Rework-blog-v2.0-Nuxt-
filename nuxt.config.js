@@ -95,19 +95,9 @@ export default {
           component: resolve(__dirname, 'components/registration.vue'),
         }),
         routes.push({
-          name: '/salon',
-          path: '/salon',
-          component: resolve(__dirname, 'components/salon_profile.vue')
-        }),
-        routes.push({
-          name: '/for_business',
-          path: '/for_business',
-          component: resolve(__dirname, 'components/aboutTheSystem/for_business.vue')
-        }),
-        routes.push({
-          name: '/for_masters',
-          path: '/for_masters',
-          component: resolve(__dirname, 'components/aboutTheSystem/for_masters.vue')
+          name: '/user',
+          path: '/user',
+          component: resolve(__dirname, 'components/user_profile.vue')
         }),
         routes.push({
           name: '/for_clients',
@@ -118,19 +108,6 @@ export default {
           name: 'user',
           path: '/user/:id',
           component: resolve(__dirname, 'components/profiles/user.vue'),
-          // children: [{
-          //   path: 'study',
-          //   name: 'user-study',
-          //   component: resolve(__dirname, 'components/profiles/study.vue'),
-          // }, {
-          //   path: 'appointments',
-          //   name: 'user-appointments',
-          //   component: resolve(__dirname, 'components/profiles/appointments.vue'),
-          // }, {
-          //   path: 'settings',
-          //   name: 'user-settings',
-          //   component: resolve(__dirname, 'components/profiles/settings.vue'),
-          // }, ],
         })
       return routes;
     },

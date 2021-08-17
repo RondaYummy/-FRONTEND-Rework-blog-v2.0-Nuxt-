@@ -1,5 +1,5 @@
 <template>
-  <div class="service" >
+  <div class="service">
     <v-card :loading="loading" class="mx-auto my-2 cardHover" max-width="270">
       <template slot="progress">
         <v-progress-linear
@@ -53,7 +53,7 @@ export default {
     serviceName: "Манікюр",
     servicePrice: "400грн.",
     salonLocation: "Location",
-    salonName: "Salon Name",
+    salonName: "user Name",
     serviceDescription:
       "Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.",
     serviceRating: "4.5",

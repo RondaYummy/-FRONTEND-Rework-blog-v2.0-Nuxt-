@@ -45,11 +45,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.fo{
-    background-image: url('../assets/404-img.png');
-    background-repeat: no-repeat;
-    background-size: 40%;
-    background-position: top;
+.fo {
+  background-image: url("../assets/404-img.png");
+  background-repeat: no-repeat;
+  background-size: 40%;
+  background-position: top;
 }
 button {
   font-family: "Varela Round", sans-serif;

@@ -9,6 +9,7 @@
       mini-variant-width="74px"
       class="nav-drawer"
       permanent
+      v-if="loginIn"
     >
       <!-- 
   temporary - затемнення та показ поверх вікон
@@ -73,6 +74,9 @@
       </v-row>
 
       <v-spacer />
+
+      <authComponent v-if="!loginIn" />
+
       <v-badge
         :content="messages"
         :value="messages"
@@ -173,6 +177,7 @@
 import authComponent from "../components/authorization.vue";
 import api from "../plugins/api";
 import likedTheSystem from "../components/additional/likedTheSystem.vue";
+import { tittle } from "../config/default.json";
 
 export default {
   components: {
@@ -182,7 +187,7 @@ export default {
   data() {
     return {
       fixed: false,
-      title: "NIKKI - ROOM",
+      title: tittle,
       messages: 66,
       show: false,
       snackbar: false,

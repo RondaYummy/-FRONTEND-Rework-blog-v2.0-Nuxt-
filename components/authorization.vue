@@ -13,8 +13,7 @@
         <p class="text-h6 font-weight-light mb-2">
           <span>
             <h3>«Nikki - Blog»</h3>
-            персоналізований
-            блог для твого відпочинку</span
+            персоналізований блог для твого відпочинку</span
           >
         </p>
         <v-alert text dense color="teal" icon="mdi-account-clock" border="left">

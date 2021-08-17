@@ -6,10 +6,10 @@
         <v-toolbar-title v-text="title" />
       </nuxt-link>
       <v-row>
-        <nuxt-link to="/salon">
+        <nuxt-link to="/user">
           <v-chip class="ma-2" color="indigo darken-3" outlined>
             <v-icon left> mdi-fire </v-icon>
-            Salon
+            Profil
           </v-chip>
         </nuxt-link>
       </v-row>
@@ -49,7 +49,7 @@
                   </p>
                   <v-divider class="my-3"></v-divider>
                   <v-btn depressed rounded text @click="getUser">
-                    Edit Account
+                    Go to profile
                   </v-btn>
                   <v-divider class="my-3"></v-divider>
                   <v-btn depressed rounded text @click="logout(user._id)">
@@ -81,7 +81,8 @@
     <v-footer :absolute="!fixed" app class="footer">
       <span> &copy;2021 &mdash; {{ new Date().getFullYear() }} </span>
       <span>
-        <span>«{{ title }}»</span> – ПЕРСОНАЛІЗОВАНИЙ БЛОГ ДЛЯ ІДЕАЛЬНОГО СПІЛКУВАННЯ
+        <span>«{{ title }}»</span> – ПЕРСОНАЛІЗОВАНИЙ БЛОГ ДЛЯ ІДЕАЛЬНОГО
+        СПІЛКУВАННЯ
       </span>
       <!-- Start SVG Image for filter #goo -->
       <div style="display: none">
@@ -115,6 +116,7 @@
 import authComponent from "../components/authorization.vue";
 import api from "../plugins/api";
 import likedTheSystem from "../components/additional/likedTheSystem.vue";
+import { tittle } from "../config/default.json";
 
 export default {
   components: {
@@ -124,7 +126,7 @@ export default {
   data() {
     return {
       fixed: false,
-      title: "NIKKI - ROOM",
+      title: tittle,
       messages: 66,
       show: false,
       snackbar: false,
@@ -147,8 +149,9 @@ export default {
     },
   },
   methods: {
-    async logout() {
-      await api.logout({ userId: this.$store.state.user._id });
+    async logout(id) {
+      await api.logout(id);
+      // TODO Продумати логіку дисконекту
       this.snackbar = true;
       this.$router.push(`/`);
       console.log("Disconeting...");

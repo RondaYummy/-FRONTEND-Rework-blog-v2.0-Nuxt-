@@ -9,7 +9,7 @@
       <input class="description" v-model="form.description" />
       <h3>Image Card</h3>
       <input class="image" v-model="form.image" />
-{{ this.cardStyle.height}}
+      {{ this.cardStyle.height }}
       <div class="slidecontainer">
         <h3>Border Radius {{ cardStyle.borderRadius }}</h3>
         <input
@@ -93,8 +93,8 @@ export default {
       },
       cardStyle: {
         borderRadius: "",
-        width: '',
-        height: '',
+        width: "",
+        height: "",
       },
     };
   },

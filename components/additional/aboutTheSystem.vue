@@ -14,7 +14,7 @@
             <br />
             з {{title}}
           </p>
-          <nuxt-link to="/for_business"> Детальніше </nuxt-link>
+          <nuxt-link to="/for_clients"> Детальніше </nuxt-link>
         </div>
       </li>
       <li class="aboutTheSystem__item">
@@ -29,7 +29,7 @@
               охочих</b
             >
           </p>
-          <nuxt-link to="/for_masters"> Детальніше </nuxt-link>
+          <nuxt-link to="/for_clients"> Детальніше </nuxt-link>
         </div>
       </li>
       <li class="aboutTheSystem__item">
@@ -49,7 +49,7 @@
 export default {
   data() {
     return {
-      title: "NIKKI - ROOM",
+      title: "NIKKI - BLOG",
     };
   },
 };
