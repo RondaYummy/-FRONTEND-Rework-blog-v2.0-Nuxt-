@@ -21,7 +21,9 @@
       <!-- Для малих розмірів екрана можна використати замість нижніж -->
       <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
-      <v-app-bar-title>USER_NAME </v-app-bar-title>
+      <v-app-bar-title
+        >{{ user_data.firstName }} {{ user_data.lastName }}</v-app-bar-title
+      >
 
       <v-spacer></v-spacer>
       <div class="text-center d-flex">
@@ -76,12 +78,50 @@
       class="overflow-y-auto"
       max-height="700"
     >
-      <v-container style="height: 300px">Lorem100</v-container>
+      <v-container style="height: 310px">Lorem100</v-container>
       <v-tabs-items v-model="tab">
         <v-tab-item>
+          <v-expansion-panels :value="0" class="exp_panel_block">
+            <v-expansion-panel>
+              <v-expansion-panel-header>
+                <template v-slot:default="{ open }">
+                  <v-row no-gutters>
+                    <v-col cols="4"> Write a post? </v-col>
+                    <v-col cols="8" class="text--secondary">
+                      <v-fade-transition leave-absolute>
+                        <span v-if="open" key="0"> To add press "Enter" </span>
+                        <span v-else key="1">
+                          {{ descriptionComment }}
+                        </span>
+                      </v-fade-transition>
+                    </v-col>
+                  </v-row>
+                </template>
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <v-text-field
+                  v-model="descriptionPost"
+                  @keydown.enter="addPost"
+                  placeholder="Write a post here..."
+                ></v-text-field>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
+
           <v-card flat>
-            <v-card-text v-text="text"></v-card-text>
-            <reviews-page />
+            <v-card class="mx-auto" max-width="800" :elevation="0">
+              <posts-list class="main_post_block" :user_posts="user_posts" />
+            </v-card>
+          </v-card>
+        </v-tab-item>
+
+        <v-tab-item>
+          <v-card flat class="d-flex flex-wrap justify-space-around">
+            <friend-list />
+            <friend-list />
+            <friend-list />
+            <friend-list />
+            <friend-list />
           </v-card>
         </v-tab-item>
 
@@ -90,48 +130,58 @@
             <h1>Services page</h1>
           </v-card>
         </v-tab-item>
-
-        <v-tab-item>
-          <v-card flat class="d-flex flex-wrap justify-space-around">
-            <masters-list />
-            <masters-list />
-            <masters-list />
-            <masters-list />
-            <masters-list />
-            <masters-list />
-            <masters-list />
-            <masters-list />
-          </v-card>
-        </v-tab-item>
       </v-tabs-items>
     </v-sheet>
   </v-card>
 </template>
 
 <script>
-import reviewsPage from "./Salon/reviews_page.vue";
-import mastersList from "./Salon/masters_list.vue";
+import friendList from "./User/friend_list.vue";
+import postsList from "./User/posts_list.vue";
+import api from "../plugins/api";
 
 export default {
   components: {
-    reviewsPage,
-    mastersList,
+    friendList,
+    postsList,
+  },
+  created: async function () {
+    if (this.$store.state.user.user) {
+      this.user_data = await api
+        .getCurrentUser(this.$store.state.user.user._id)
+        .then((res) => res.data.user);
+      this.title = `${this.user_data.firstName} ${this.user_data.lastName}`;
+      this.user_posts = await api
+        .getUserPosts(this.$store.state.user.user._id)
+        .then((res) => res.data.data);
+      this.user_posts.reverse();
+    }
   },
   data: () => ({
     title: `User`,
+    user_data: {},
+    user_posts: [],
+    descriptionPost: "",
     items: [
       { title: "Click Me" },
       { title: "Click Me" },
       { title: "Click Me" },
-      { title: "Click Me 2" },
     ],
     tab: null,
     itemsMenu: ["Main", "Friends", "Settings"],
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veveniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-
     length: 5,
     rating: 3.5,
   }),
+  methods: {
+    async addPost() {
+      const post = await api.addpost(this.$store.state.user.user._id, {
+        description: this.descriptionPost,
+      });
+
+      this.user_posts.unshift(post.data.data); // TODO коли добавляєш пост не появляються дані користувача бо не підтягується попуулейт, треба робити запит знову?
+      this.descriptionPost = "";
+    },
+  },
   head() {
     return {
       title: this.title,
@@ -148,5 +198,16 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+.exp_panel_block {
+  margin: 0 auto;
+  max-width: 800px;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+.main_post_block {
+  padding: 1.5rem;
+  background-color: #f0f2f5;
+  margin-bottom: 2rem;
+}
 </style>

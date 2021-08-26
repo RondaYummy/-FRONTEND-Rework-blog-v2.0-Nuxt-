@@ -119,6 +119,8 @@ import likedTheSystem from "../components/additional/likedTheSystem.vue";
 import { tittle } from "../config/default.json";
 
 export default {
+  // TODO добавив мідлвар сюда
+  middleware: ["auth"],
   components: {
     likedTheSystem,
     authComponent,

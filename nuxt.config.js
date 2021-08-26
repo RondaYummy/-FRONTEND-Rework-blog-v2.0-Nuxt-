@@ -5,7 +5,7 @@ export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     titleTemplate: '%s',
-    title: 'frontend_nails_project',
+    title: 'blog_nails_project',
     htmlAttrs: {
       lang: 'en'
     },
@@ -53,11 +53,7 @@ export default {
     port: config.get('server.url.port')
   },
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ['@nuxtjs/axios',
-    ['cookie-universal-nuxt', {
-      alias: 'cookiz'
-    }],
-  ],
+  modules: ['@nuxtjs/axios', ],
   axios: {
     // proxy: true
   },
@@ -103,11 +99,6 @@ export default {
           name: '/for_clients',
           path: '/for_clients',
           component: resolve(__dirname, 'components/aboutTheSystem/for_clients.vue'),
-        }),
-        routes.push({
-          name: 'user',
-          path: '/user/:id',
-          component: resolve(__dirname, 'components/profiles/user.vue'),
         })
       return routes;
     },

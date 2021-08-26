@@ -183,6 +183,7 @@ export default {
             this.email = "";
             this.password = "";
             this.errorMessage = "";
+            console.log(response.config.headers);
             this.$store.commit("user/add", response.data.user);
           })
           .catch((error) => {

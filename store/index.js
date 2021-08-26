@@ -1,17 +1,15 @@
 export const actions = {
   async nuxtServerInit({
     commit,
-    dispatch
   }, {
     req,
     app
   }) {
-    const token = await app.$cookiz.get('token');
-
-    if (token) {
-      await dispatch('user/add', {
-        token
-      })
+    console.log('cookies', req.session);
+    // TODO тоже для токенів не доробив нічо
+    if (req.session) {
+      commit('user/add', req.session)
     }
+
   }
 }
