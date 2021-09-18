@@ -46,6 +46,9 @@ export default {
   addpost(id, v) {
     return axios.post(`/user/${id}/posts`, v);
   },
+  addComment(idPost, v) {
+    return axios.post(`/posts/${idPost}/comments`, v);
+  },
   getUserPosts(id) {
     return axios.get(`/user/${id}/posts/`);
   },

@@ -19,6 +19,7 @@
       <v-expansion-panel-content>
         <v-text-field
           v-model="descriptionComment"
+          @keydown.enter="addComment"
           placeholder="Write a comment here..."
         ></v-text-field>
       </v-expansion-panel-content>
@@ -27,10 +28,21 @@
 </template>
 
 <script>
+import api from "../../plugins/api";
+
 export default {
   data: () => ({
     descriptionComment: "",
   }),
+  methods: {
+    async addComment() {
+       const postId = 123;
+      const comment = await api.addComment(postId, {
+        description: this.descriptionComment,
+        // user, // користувач якому постять коммент
+      });
+    },
+  },
 };
 </script>
 

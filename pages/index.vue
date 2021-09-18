@@ -7,11 +7,11 @@
 
           <form>
             <div class="step__footer">
-              <nuxt-link class="black__btn" to="#">Показати на карті</nuxt-link>
+              <nuxt-link class="black__btn" to="#">Знайти користувача</nuxt-link>
             </div>
 
             <div class="step__footer">
-              <nuxt-link class="black__btn" to="#">Записатись</nuxt-link>
+              <nuxt-link class="black__btn" to="#">Зареєструватись</nuxt-link>
             </div>
           </form>
 

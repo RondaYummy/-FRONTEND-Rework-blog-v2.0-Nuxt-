@@ -92,7 +92,7 @@ export default {
         }),
         routes.push({
           name: '/user',
-          path: '/user',
+          path: '/user/:id',
           component: resolve(__dirname, 'components/user_profile.vue')
         }),
         routes.push({

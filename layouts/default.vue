@@ -189,10 +189,13 @@ export default {
   padding-top: 5rem;
   background: #19343a;
   color: rgba(255, 255, 255, 0.64);
+  
 }
 .app-bar {
   padding-left: 13px;
   padding-right: 33px;
+  z-index: 20;
+  
 }
 
 .awatar_main {

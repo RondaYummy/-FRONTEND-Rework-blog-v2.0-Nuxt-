@@ -20,7 +20,11 @@
         <v-btn text color="deep-purple accent-4"> Edit </v-btn>
         <v-btn text color="deep-purple accent-4"> Delete </v-btn>
       </v-card-actions>
-      <!-- <commentList :comments="user.comments" /> -->
+      <commentList
+        :comments="user.comments"
+        v-for="comment in user.comments"
+        :key="comment._id"
+      />
       <comment-field />
     </v-card>
   </section>
@@ -36,8 +40,6 @@ export default {
     commentField,
     commentList,
   },
-  data: () => ({
-  }),
-
+  data: () => ({}),
 };
 </script>

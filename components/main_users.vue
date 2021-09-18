@@ -50,12 +50,11 @@ export default {
   data: () => ({
     loading: false,
     selection: 1,
-    serviceName: "Манікюр",
+    serviceName: "User777",
     servicePrice: "400грн.",
     salonLocation: "Location",
-    salonName: "user Name",
-    serviceDescription:
-      "Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.",
+    salonName: "user email",
+    serviceDescription: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, labore!",
     serviceRating: "4.5",
 
     howManyVoted: "413",
