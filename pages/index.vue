@@ -7,7 +7,9 @@
 
           <form>
             <div class="step__footer">
-              <nuxt-link class="black__btn" to="#">Знайти користувача</nuxt-link>
+              <nuxt-link class="black__btn" to="#"
+                >Знайти користувача</nuxt-link
+              >
             </div>
 
             <div class="step__footer">

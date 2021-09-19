@@ -52,4 +52,7 @@ export default {
   getUserPosts(id) {
     return axios.get(`/user/${id}/posts/`);
   },
+  search(v) {
+    return axios.get(`/user/search/${v}`);
+  },
 };

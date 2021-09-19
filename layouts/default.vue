@@ -5,6 +5,19 @@
       <nuxt-link to="/" class="tittle">
         <v-toolbar-title v-text="title" />
       </nuxt-link>
+      <v-autocomplete
+        v-model="select"
+        :loading="loading"
+        :items="items"
+        :search-input.sync="search"
+        cache-items
+        class="mx-4"
+        flat
+        hide-no-data
+        hide-details
+        label="Search users?"
+        solo-inverted
+      ></v-autocomplete>
       <v-row>
         <nuxt-link to="/user">
           <v-chip class="ma-2" color="indigo darken-3" outlined>
@@ -117,6 +130,7 @@ import authComponent from "../components/authorization.vue";
 import api from "../plugins/api";
 import likedTheSystem from "../components/additional/likedTheSystem.vue";
 import { tittle } from "../config/default.json";
+import debounce from "lodash/debounce";
 
 export default {
   // TODO добавив мідлвар сюда
@@ -135,6 +149,11 @@ export default {
       disconnectText: "You are logged out.",
       timeout: 2000,
       loginIn: false,
+      page: null,
+      loading: false,
+      items: [],
+      search: null,
+      select: null,
     };
   },
   computed: {
@@ -145,6 +164,9 @@ export default {
   watch: {
     user: function () {
       this.loginIn = true;
+    },
+    search(val) {
+      val && val !== this.select && this.querySelections(val);
     },
     group() {
       this.drawer = false;
@@ -158,6 +180,41 @@ export default {
       this.$router.push(`/`);
       console.log("Disconeting...");
     },
+    onClick(user) {
+      this.$router.push(`/user/${user._id}`);
+    },
+    querySelections: debounce(function (name) {
+      this.loading = true;
+      // String update
+      if (this.name !== name) {
+        this.name = name;
+        this.data = [];
+        this.page = 1;
+        this.totalPages = 1;
+      }
+      // String cleared
+      if (!name.length) {
+        this.data = [];
+        this.page = 1;
+        this.totalPages = 1;
+        return;
+      }
+      // TODO зробити пошук користувачів і перехід на профіль
+      api
+        .search(name)
+        .then(({ data }) => {
+          console.log(data);
+          data.candidate.forEach((item) => this.data.push(item));
+          this.page++;
+          this.totalPages = data.total_pages;
+        })
+        .catch((error) => {
+          throw error;
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+    }, 500),
     getUser() {
       console.log("UserStore", this.$store.state.user.user);
     },
@@ -189,13 +246,11 @@ export default {
   padding-top: 5rem;
   background: #19343a;
   color: rgba(255, 255, 255, 0.64);
-  
 }
 .app-bar {
   padding-left: 13px;
   padding-right: 33px;
   z-index: 20;
-  
 }
 
 .awatar_main {

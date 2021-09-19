@@ -22,7 +22,7 @@
       <h1 class="unauth">{{ unauthorized }}</h1>
     </div>
     <h1 v-else>
-      {{ otherError }}
+      {{ otherError }} ({{ error.statusCode }})
     </h1>
   </v-app>
 </template>
