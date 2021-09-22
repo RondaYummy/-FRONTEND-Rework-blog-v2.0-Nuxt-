@@ -136,24 +136,24 @@
 </template>
 
 <script>
-import friendList from "./User/friend_list.vue";
-import postsList from "./User/posts_list.vue";
-import api from "../plugins/api";
+import friendList from './User/friend_list.vue';
+import postsList from './User/posts_list.vue';
+import api from '../plugins/api';
 
 export default {
   components: {
     friendList,
-    postsList,
+    postsList
   },
-  created: async function () {
+  async created() {
     if (this.$store.state.user.user) {
       this.user_data = await api
         .getCurrentUser(this.$store.state.user.user._id)
-        .then((res) => res.data.user);
+        .then(res => res.data.user);
       this.title = `${this.user_data.firstName} ${this.user_data.lastName}`;
       this.user_posts = await api
         .getUserPosts(this.$store.state.user.user._id)
-        .then((res) => res.data.data);
+        .then(res => res.data.data);
       this.user_posts.reverse();
     }
   },
@@ -161,26 +161,27 @@ export default {
     title: `User`,
     user_data: {},
     user_posts: [],
-    descriptionPost: "",
+    descriptionPost: '',
     items: [
-      { title: "Click Me" },
-      { title: "Click Me" },
-      { title: "Click Me" },
+      { title: 'Click Me' },
+      { title: 'Click Me' },
+      { title: 'Click Me' }
     ],
     tab: null,
-    itemsMenu: ["Main", "Friends", "Settings"],
+    itemsMenu: ['Main', 'Friends', 'Settings'],
     length: 5,
-    rating: 3.5,
+    rating: 3.5
   }),
   methods: {
     async addPost() {
       const post = await api.addpost(this.$store.state.user.user._id, {
-        description: this.descriptionPost,
+        description: this.descriptionPost
       });
 
-      this.user_posts.unshift(post.data.data); // TODO коли добавляєш пост не появляються дані користувача бо не підтягується попуулейт, треба робити запит знову?
-      this.descriptionPost = "";
-    },
+      this.user_posts.unshift(post.data.data);
+      // TODO коли добавляєш пост не появляються дані користувача бо не підтягується попуулейт, треба робити запит знову?
+      this.descriptionPost = '';
+    }
   },
   head() {
     return {
@@ -188,13 +189,13 @@ export default {
       meta: [
         // hid is used as unique identifier. Do not use `vmid` for it as it will not work
         {
-          hid: "user",
-          name: "user",
-          content: "My custom user",
-        },
-      ],
+          hid: 'user',
+          name: 'user',
+          content: 'My custom user'
+        }
+      ]
     };
-  },
+  }
 };
 </script>
 

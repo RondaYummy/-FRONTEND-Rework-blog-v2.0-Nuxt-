@@ -49,7 +49,7 @@
 export default {
   data() {
     return {
-      title: "NIKKI - BLOG",
+      title: 'NIKKI - BLOG',
     };
   },
 };

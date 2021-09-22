@@ -11,7 +11,7 @@
       permanent
       v-if="loginIn"
     >
-      <!-- 
+      <!--
   temporary - затемнення та показ поверх вікон
   bottom - для мобільних телефонів відображенн знизу?
   absolute/fixed - позиція меню
@@ -174,15 +174,13 @@
 </template>
 
 <script>
-import authComponent from "../components/authorization.vue";
-import api from "../plugins/api";
-import likedTheSystem from "../components/additional/likedTheSystem.vue";
-import { tittle } from "../config/default.json";
+import authComponent from '../components/authorization.vue';
+import api from '../plugins/api';
+import { tittle } from '../config/default.json';
 
 export default {
   components: {
-    likedTheSystem,
-    authComponent,
+    authComponent
   },
   data() {
     return {
@@ -191,7 +189,7 @@ export default {
       messages: 66,
       show: false,
       snackbar: false,
-      disconnectText: "You are logged out.",
+      disconnectText: 'You are logged out.',
       timeout: 2000,
       loginIn: false,
 
@@ -201,42 +199,42 @@ export default {
       miniVariant: true,
       items: [
         {
-          icon: "mdi-apps",
-          title: "Welcome",
-          to: "#",
+          icon: 'mdi-apps',
+          title: 'Welcome',
+          to: '#'
         },
         {
-          icon: "mdi-chart-bubble",
-          title: "Inspire",
-          to: "#",
-        },
-      ],
+          icon: 'mdi-chart-bubble',
+          title: 'Inspire',
+          to: '#'
+        }
+      ]
     };
   },
   computed: {
-    user: function () {
+    user() {
       return this.$store.state.user.user;
-    },
+    }
   },
   watch: {
-    user: function () {
+    user() {
       this.loginIn = true;
     },
     group() {
       this.drawer = false;
-    },
+    }
   },
   methods: {
     async logout() {
       await api.logout({ userId: this.$store.state.user._id });
       this.snackbar = true;
       this.$router.push(`/`);
-      console.log("Disconeting...");
+      console.log('Disconeting...');
     },
     getUser() {
-      console.log("UserStore", this.$store.state.user.user);
-    },
-  },
+      console.log('UserStore', this.$store.state.user.user);
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -294,7 +292,7 @@ export default {
 }
 .d38:before,
 .d38:after {
-  content: "";
+  content: '';
   width: 1.25em;
   height: 1.25em;
   margin: 0.5em 1.5em;

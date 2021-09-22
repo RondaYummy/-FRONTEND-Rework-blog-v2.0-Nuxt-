@@ -31,11 +31,11 @@
 </template>
 
 <script>
-import commentField from "./comment_field.vue";
-import commentList from "./comment_list.vue";
+import commentField from './comment_field.vue';
+import commentList from './comment_list.vue';
 
 export default {
-  props: ["user_posts"],
+  props: ['user_posts'],
   components: {
     commentField,
     commentList,

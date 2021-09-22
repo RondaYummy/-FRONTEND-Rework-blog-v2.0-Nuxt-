@@ -7,7 +7,9 @@
 
           <form>
             <div class="step__footer">
-              <nuxt-link class="black__btn" to="#"
+              <nuxt-link
+              class="black__btn"
+              to="#"
                 >Знайти користувача</nuxt-link
               >
             </div>
@@ -46,14 +48,14 @@
         <div class="services__main_block">
           <h3 class="text_tittle">станьте одним із нас</h3>
           <section class="main_users">
-            <main_users />
-            <main_users />
-            <main_users />
-            <main_users />
-            <main_users />
-            <main_users />
-            <main_users />
-            <main_users />
+            <mainUsers />
+            <mainUsers />
+            <mainUsers />
+            <mainUsers />
+            <mainUsers />
+            <mainUsers />
+            <mainUsers />
+            <mainUsers />
           </section>
           <v-btn
             class="btn btn-1"
@@ -76,26 +78,26 @@
 </template>
 
 <script>
-import main_users from "../components/main_users.vue";
-import aboutTheSystem from "../components/additional/aboutTheSystem.vue";
-import likedTheSystem from "../components/additional/likedTheSystem.vue";
-import { tittle } from "../config/default.json";
+import mainUsers from '../components/main_users.vue';
+import aboutTheSystem from '../components/additional/aboutTheSystem.vue';
+import likedTheSystem from '../components/additional/likedTheSystem.vue';
+import { tittle } from '../config/default.json';
 
 export default {
   components: {
-    main_users,
+    mainUsers,
     likedTheSystem,
-    aboutTheSystem,
+    aboutTheSystem
   },
   data: () => ({
     loading: false,
-    title: tittle,
+    title: tittle
   }),
   methods: {
     getMoreServices() {
       this.loading = true;
-      console.log("Get more services logic here...");
-    },
+      console.log('Get more services logic here...');
+    }
   },
   head() {
     return {
@@ -103,18 +105,18 @@ export default {
       meta: [
         // hid is used as unique identifier. Do not use `vmid` for it as it will not work
         {
-          hid: "description",
-          name: "description",
-          content: "My custom description",
-        },
-      ],
+          hid: 'description',
+          name: 'description',
+          content: 'My custom description'
+        }
+      ]
     };
-  },
+  }
 };
 </script>
 
 <style lang="scss" scoped>
-@import url(https://fonts.googleapis.com/css?family=Roboto:400,100,900);
+@import url('https://fonts.googleapis.com/css?family=Roboto:400', 100, 900);
 
 //colors button
 $white: #ffffff;
@@ -283,7 +285,7 @@ $black: rgb(0, 0, 0);
   min-width: 12.23em;
   padding: 1.18em 1.32em 1.03em;
 
-  font-family: "Source Code Pro", monospace;
+  font-family: 'Source Code Pro', monospace;
   font-size: 18px;
   font-weight: bold;
   line-height: 1;
@@ -306,7 +308,7 @@ $black: rgb(0, 0, 0);
   width: 4.4em;
   height: 2.95em;
 
-  content: "";
+  content: '';
   transition: transform 0.3s ease;
   transform: scale(0);
   border-radius: 50%;
@@ -341,7 +343,7 @@ $black: rgb(0, 0, 0);
   text-align: center;
   margin-bottom: 3.5rem;
   text-transform: uppercase;
-  font-family: "Playfair Display", serif;
+  font-family: 'Playfair Display', serif;
   letter-spacing: 1px;
   width: 550px;
   font-size: 40px;
@@ -364,7 +366,7 @@ $black: rgb(0, 0, 0);
   justify-content: center;
   height: 530px;
   position: relative;
-  background-image: url("../assets/appearance.jpg");
+  background-image: url('../assets/appearance.jpg');
   background-position-x: -3rem;
   background-size: contain;
   background-repeat: no-repeat;
@@ -373,7 +375,7 @@ $black: rgb(0, 0, 0);
   .gaslo_main {
     position: absolute;
     font-weight: bold;
-    background-image: url("../assets/images/hr.svg");
+    background-image: url('../assets/images/hr.svg');
     padding-left: 30px;
     width: 355px;
     height: 50px;
@@ -410,7 +412,7 @@ $black: rgb(0, 0, 0);
   }
 
   h1::after {
-    content: "";
+    content: '';
     position: absolute;
     bottom: 0;
     left: 50%;
@@ -432,11 +434,11 @@ $black: rgb(0, 0, 0);
   }
 }
 .main-section::after {
-  content: "";
+  content: '';
   bottom: 0;
   height: 75px;
   width: 100%;
-  background: url("../assets/bg_footer.png") bottom center repeat-x;
+  background: url('../assets/bg_footer.png') bottom center repeat-x;
   background-size: cover;
   background-repeat: no-repeat;
   position: absolute;

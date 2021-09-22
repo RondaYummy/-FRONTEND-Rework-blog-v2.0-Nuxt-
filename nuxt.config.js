@@ -26,7 +26,7 @@ export default {
       rel: 'icon',
       type: 'image/x-icon',
       href: '/favicon.ico'
-    }]
+    }],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -34,7 +34,7 @@ export default {
 
   loading: {
     color: 'blue',
-    height: '4px'
+    height: '4px',
   },
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: ['~/plugins/axios.js', '~/plugins/vuePhoneNumber.js'],

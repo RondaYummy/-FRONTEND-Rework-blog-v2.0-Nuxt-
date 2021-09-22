@@ -179,12 +179,12 @@
             >
               <template v-slot:label>
                 I agree to the&nbsp;
-                <a href="#" @click.stop.prevent="dialog = true"
-                  >Terms of Service</a
-                >
+                <a href="#" @click.stop.prevent="dialog = true">
+                  Terms of Service
+                </a>
                 &nbsp;and&nbsp;
-                <a href="#" @click.stop.prevent="privacyPolicy = true"
-                  >Privacy Policy</a
+                <a href="#" @click.stop.prevent="privacyPolicy = true">
+                  Privacy Policy </a
                 >*
               </template>
             </v-checkbox>
@@ -304,7 +304,8 @@
             <h3>Номер телефону:</h3>
             {{ phone }}
           </span>
-          <span class="text-h6 font-weight-light mb-2"
+          <span
+          class="text-h6 font-weight-light mb-2"
             ><h3>Стать:</h3>
             <span v-if="gender === 'Male'">Чоловіча</span>
             <span v-if="gender === 'Female'">жіноча</span>
@@ -344,19 +345,20 @@
 </template>
 
 <script>
-import { validationMixin } from "vuelidate";
+import { validationMixin } from 'vuelidate';
 import {
   required,
   maxLength,
   email,
   minLength,
-  sameAs,
-} from "vuelidate/lib/validators";
-import api from "../plugins/api";
-import VuePhoneNumberInput from "vue-phone-number-input";
+  sameAs
+} from 'vuelidate/lib/validators';
+import VuePhoneNumberInput from 'vue-phone-number-input';
+import api from '../plugins/api';
+
 export default {
   components: {
-    VuePhoneNumberInput,
+    VuePhoneNumberInput
   },
   mixins: [validationMixin],
 
@@ -367,7 +369,7 @@ export default {
       required,
       maxLength: maxLength(26),
       minLength: minLength(8),
-      sameAsPassword: sameAs("password"),
+      sameAsPassword: sameAs('password')
     },
     firstName: { required, maxLength: maxLength(16), minLength: minLength(3) },
     lastName: { required, maxLength: maxLength(16), minLength: minLength(3) },
@@ -376,38 +378,37 @@ export default {
     TermsOfServiceAndPrivacyPolicy: {
       checked(val) {
         return val;
-      },
-    },
+      }
+    }
   },
   watch: {
     menu(val) {
-      val && setTimeout(() => (this.activePicker = "YEAR"));
-    },
+      val && setTimeout(() => (this.activePicker = 'YEAR'));
+    }
   },
   data: () => ({
     step: 1,
-    email: "",
-    password: "",
-    confirmPassword: "",
-    dialog: false,
+    email: '',
+    password: '',
+    confirmPassword: '',
     agreeCreatedAccount: false,
-    userPersonalInfo: "",
+    userPersonalInfo: '',
     TermsOfServiceAndPrivacyPolicy: false,
     dialog: false,
     privacyPolicy: false,
-    firstName: "",
-    lastName: "",
-    phone: "",
+    firstName: '',
+    lastName: '',
+    phone: '',
     gender: null,
-    items: ["Male", "Female"],
+    items: ['Male', 'Female'],
     activePicker: null,
     date: null,
     menu: false,
     show1: false,
     show2: false,
-    title: "Nikki - Nails | Registration",
-    errorMessage: "",
-    phoneError: true,
+    title: 'Nikki - Nails | Registration',
+    errorMessage: '',
+    phoneError: true
   }),
 
   methods: {
@@ -420,8 +421,8 @@ export default {
       }
     },
     back() {
-      this.step--;
-      this.errorMessage = "";
+      this.step -= 1;
+      this.errorMessage = '';
     },
     save(date) {
       this.$refs.menu.save(date);
@@ -439,22 +440,22 @@ export default {
             gender: this.gender,
             age: this.date,
             phone: this.phone,
-            TermsOfServiceAndPrivacyPolicy: this.TermsOfServiceAndPrivacyPolicy,
+            TermsOfServiceAndPrivacyPolicy: this.TermsOfServiceAndPrivacyPolicy
           })
           .then(() => {
             api
               .login({
                 email: this.email,
-                password: this.password,
+                password: this.password
               })
               .then((response) => {
-                this.errorMessage = "";
-                this.$store.commit("user/add", response.data.user);
-                this.$router.push("/");
+                this.errorMessage = '';
+                this.$store.commit('user/add', response.data.user);
+                this.$router.push('/');
               });
           })
 
-          .catch((error) => {
+          .catch(error => {
             this.errorMessage = error.response.data || error.message;
           });
       }
@@ -469,12 +470,13 @@ export default {
         this.$v.password.$invalid ||
         this.$v.confirmPassword.$invalid
       ) {
-        console.log("ERROR");
+        console.log('ERROR');
       } else {
         // do your submit logic here
-        console.log("submit page: ", `${this.step}`);
-        return this.step++;
+        console.log('submit page: ', `${this.step}`);
+        return (this.step += 1);
       }
+      return false;
     },
     confirmPersonalInfo() {
       this.$v.firstName.$touch();
@@ -491,58 +493,59 @@ export default {
         this.phoneError ||
         this.$v.TermsOfServiceAndPrivacyPolicy.$invalid
       ) {
-        console.log("ERROR");
+        console.log('ERROR');
       } else {
         // do your submit logic here
-        console.log("submit page: ", `${this.step}`);
-        return this.step++;
+        console.log('submit page: ', `${this.step}`);
+        return (this.step += 1);
       }
-    },
+      return false;
+    }
   },
   computed: {
     currentTitle() {
       switch (this.step) {
         case 1:
-          return "Дані для входу";
+          return 'Дані для входу';
         case 2:
-          return "Персональна інформація";
+          return 'Персональна інформація';
         default:
-          return "Підтвердіть створення аккаунту";
+          return 'Підтвердіть створення аккаунту';
       }
     },
     progress() {
       return Math.min(100, this.password.length * 6);
     },
     color() {
-      return ["error", "warning", "success"][Math.floor(this.progress / 40)];
+      return ['error', 'warning', 'success'][Math.floor(this.progress / 40)];
     },
     emailErrors() {
       const errors = [];
       if (!this.$v.email.$dirty) return errors;
-      !this.$v.email.email && errors.push("Must be valid e-mail");
-      !this.$v.email.required && errors.push("E-mail is required");
+      !this.$v.email.email && errors.push('Must be valid e-mail');
+      !this.$v.email.required && errors.push('E-mail is required');
       return errors;
     },
     passwordErrors() {
       const errors = [];
       if (!this.$v.password.$dirty) return errors;
       !this.$v.password.maxLength &&
-        errors.push("Password must be at most 26 characters long");
+        errors.push('Password must be at most 26 characters long');
       !this.$v.password.minLength &&
-        errors.push("The password must be at least 8 characters long");
-      !this.$v.password.required && errors.push("Password is required.");
+        errors.push('The password must be at least 8 characters long');
+      !this.$v.password.required && errors.push('Password is required.');
       return errors;
     },
     confirmPasswordErrors() {
       const errors = [];
       if (!this.$v.confirmPassword.$dirty) return errors;
       !this.$v.confirmPassword.maxLength &&
-        errors.push("Password must be at most 26 characters long");
+        errors.push('Password must be at most 26 characters long');
       !this.$v.confirmPassword.minLength &&
-        errors.push("The password must be at least 8 characters long");
-      !this.$v.confirmPassword.required && errors.push("Password is required.");
+        errors.push('The password must be at least 8 characters long');
+      !this.$v.confirmPassword.required && errors.push('Password is required.');
       if (!this.$v.confirmPassword.sameAsPassword) {
-        errors.push("Passwords must be identical.");
+        errors.push('Passwords must be identical.');
       }
       return errors;
     },
@@ -550,41 +553,41 @@ export default {
       const errors = [];
       if (!this.$v.TermsOfServiceAndPrivacyPolicy.$dirty) return errors;
       !this.$v.TermsOfServiceAndPrivacyPolicy.checked &&
-        errors.push("You must agree to continue!");
+        errors.push('You must agree to continue!');
       return errors;
     },
     selectErrors() {
       const errors = [];
       if (!this.$v.gender.$dirty) return errors;
-      !this.$v.gender.required && errors.push("Gender is required");
+      !this.$v.gender.required && errors.push('Gender is required');
       return errors;
     },
     dateErrors() {
       const errors = [];
       if (!this.$v.date.$dirty) return errors;
-      !this.$v.date.required && errors.push("Date is required");
+      !this.$v.date.required && errors.push('Date is required');
       return errors;
     },
     firstNameErrors() {
       const errors = [];
       if (!this.$v.firstName.$dirty) return errors;
       !this.$v.firstName.maxLength &&
-        errors.push("First name must be at most 10 characters long");
+        errors.push('First name must be at most 10 characters long');
       !this.$v.firstName.minLength &&
-        errors.push("The First name must be at least 3 characters long");
-      !this.$v.firstName.required && errors.push("First name is required.");
+        errors.push('The First name must be at least 3 characters long');
+      !this.$v.firstName.required && errors.push('First name is required.');
       return errors;
     },
     lastNameErrors() {
       const errors = [];
       if (!this.$v.lastName.$dirty) return errors;
       !this.$v.lastName.maxLength &&
-        errors.push("Last name must be at most 16 characters long");
+        errors.push('Last name must be at most 16 characters long');
       !this.$v.lastName.minLength &&
-        errors.push("The Last name must be at least 3 characters long");
-      !this.$v.lastName.required && errors.push("Last name is required.");
+        errors.push('The Last name must be at least 3 characters long');
+      !this.$v.lastName.required && errors.push('Last name is required.');
       return errors;
-    },
+    }
   },
   head() {
     return {
@@ -592,13 +595,13 @@ export default {
       meta: [
         // hid is used as unique identifier. Do not use `vmid` for it as it will not work
         {
-          hid: "salon",
-          name: "salon",
-          content: "My custom salon",
-        },
-      ],
+          hid: 'salon',
+          name: 'salon',
+          content: 'My custom salon'
+        }
+      ]
     };
-  },
+  }
 };
 </script>
 

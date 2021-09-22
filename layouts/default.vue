@@ -1,6 +1,12 @@
 <template>
   <v-app light>
-    <v-app-bar fixed app height="80px" class="app-bar" flat color="white">
+    <v-app-bar
+      fixed
+      app
+      height="80px"
+      class="app-bar"
+      flat
+      color="white">
       <div class="d38"></div>
       <nuxt-link to="/" class="tittle">
         <v-toolbar-title v-text="title" />
@@ -126,18 +132,16 @@
 </template>
 
 <script>
-import authComponent from "../components/authorization.vue";
-import api from "../plugins/api";
-import likedTheSystem from "../components/additional/likedTheSystem.vue";
-import { tittle } from "../config/default.json";
-import debounce from "lodash/debounce";
+import debounce from 'lodash/debounce';
+import authComponent from '../components/authorization.vue';
+import api from '../plugins/api';
+import { tittle } from '../config/default.json';
 
 export default {
   // TODO добавив мідлвар сюда
-  middleware: ["auth"],
+  middleware: ['auth'],
   components: {
-    likedTheSystem,
-    authComponent,
+    authComponent
   },
   data() {
     return {
@@ -146,23 +150,23 @@ export default {
       messages: 66,
       show: false,
       snackbar: false,
-      disconnectText: "You are logged out.",
+      disconnectText: 'You are logged out.',
       timeout: 2000,
       loginIn: false,
       page: null,
       loading: false,
       items: [],
       search: null,
-      select: null,
+      select: null
     };
   },
   computed: {
-    user: function () {
+    user() {
       return this.$store.state.user.user;
-    },
+    }
   },
   watch: {
-    user: function () {
+    user() {
       this.loginIn = true;
     },
     search(val) {
@@ -170,7 +174,7 @@ export default {
     },
     group() {
       this.drawer = false;
-    },
+    }
   },
   methods: {
     async logout(id) {
@@ -178,12 +182,12 @@ export default {
       // TODO Продумати логіку дисконекту
       this.snackbar = true;
       this.$router.push(`/`);
-      console.log("Disconeting...");
+      console.log('Disconeting...');
     },
     onClick(user) {
       this.$router.push(`/user/${user._id}`);
     },
-    querySelections: debounce(function (name) {
+    querySelections: debounce(function(name) {
       this.loading = true;
       // String update
       if (this.name !== name) {
@@ -204,11 +208,11 @@ export default {
         .search(name)
         .then(({ data }) => {
           console.log(data);
-          data.candidate.forEach((item) => this.data.push(item));
-          this.page++;
+          data.candidate.forEach(item => this.data.push(item));
+          this.page += 1;
           this.totalPages = data.total_pages;
         })
-        .catch((error) => {
+        .catch(error => {
           throw error;
         })
         .finally(() => {
@@ -216,9 +220,9 @@ export default {
         });
     }, 500),
     getUser() {
-      console.log("UserStore", this.$store.state.user.user);
-    },
-  },
+      console.log('UserStore', this.$store.state.user.user);
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -277,7 +281,7 @@ export default {
 }
 .d38:before,
 .d38:after {
-  content: "";
+  content: '';
   width: 1.25em;
   height: 1.25em;
   margin: 0.5em 1.5em;

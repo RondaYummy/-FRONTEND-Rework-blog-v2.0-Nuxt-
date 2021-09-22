@@ -15,9 +15,19 @@ module.exports = {
     '@nuxtjs',
     'plugin:nuxt/recommended'
   ],
-  // add your custom rules here
   rules: {
-    eslint linebreak - style: ["error", "windows"]
+    "linebreak-style": ["windows"],
+    "comma-dangle": ["error", "only-multiline"],
+    "semi": ['off'],
+    "space-before-function-paren": ['off'],
+    "curly": ['off'],
+    "arrow-parens": ['off'],
+    "no-underscore-dangle": ['off'],
+    "max-len": ["error", {
+      "code": 140,
+    }],
+    "no-nested-ternary": ['off'],
+    "import/no-extraneous-dependencies": [{ devDependencies: true }]
   },
   globals: {
     $nuxt: true,

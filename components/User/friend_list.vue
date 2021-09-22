@@ -100,4 +100,3 @@
     </template>
   </v-hover>
 </template>
-

@@ -111,15 +111,15 @@
 </template>
 
 <script>
-import api from "../plugins/api";
+import { validationMixin } from 'vuelidate';
 
-import { validationMixin } from "vuelidate";
 import {
   required,
   maxLength,
   email,
   minLength,
-} from "vuelidate/lib/validators";
+} from 'vuelidate/lib/validators';
+import api from '../plugins/api';
 
 export default {
   mixins: [validationMixin],
@@ -131,20 +131,19 @@ export default {
     show1: false,
     sheet: false,
     overlay: false,
-    email: "",
-    password: "",
+    email: '',
+    password: '',
     loader: null,
     loading: false,
-    errorMessage: "",
+    errorMessage: '',
     emailRules: [
-      (v) => !!v || "Потрібний E-mail",
-      (v) => /.+@.+\..+/.test(v) || "E-mail пошта повинна бути дійсною",
+      v => !!v || 'Потрібний E-mail',
+      v => /.+@.+\..+/.test(v) || 'E-mail пошта повинна бути дійсною',
     ],
     passwordRules: [
-      (v) => !!v || "Потрібний пароль",
-      (v) =>
-        (v && v.length <= 26) || "Пароль повинен мати не більше 26 символів.",
-      (v) => (v && v.length >= 8) || "Пароль повинен мати не менше 8 символів.",
+      v => !!v || 'Потрібний пароль',
+      v => (v && v.length <= 26) || 'Пароль повинен мати не більше 26 символів.',
+      v => (v && v.length >= 8) || 'Пароль повинен мати не менше 8 символів.',
     ],
   }),
   watch: {
@@ -163,13 +162,13 @@ export default {
   methods: {
     goToRegistration() {
       this.sheet = false;
-      this.$router.push("/registration");
+      this.$router.push('/registration');
     },
     signIn() {
-      this.loader = "loading";
+      this.loader = 'loading';
       this.$v.$touch();
       if (this.$v.$invalid) {
-        this.loader = "";
+        this.loader = '';
       } else {
         // do your submit logic here
         api
@@ -180,11 +179,11 @@ export default {
           .then((response) => {
             this.sheet = false;
             this.loading = false;
-            this.email = "";
-            this.password = "";
-            this.errorMessage = "";
+            this.email = '';
+            this.password = '';
+            this.errorMessage = '';
             console.log(response.config.headers);
-            this.$store.commit("user/add", response.data.user);
+            this.$store.commit('user/add', response.data.user);
           })
           .catch((error) => {
             this.errorMessage = error.response.data || error.message;
@@ -198,7 +197,7 @@ export default {
       return Math.min(100, this.password.length * 6);
     },
     color() {
-      return ["error", "warning", "success"][Math.floor(this.progress / 40)];
+      return ['error', 'warning', 'success'][Math.floor(this.progress / 40)];
     },
   },
 };

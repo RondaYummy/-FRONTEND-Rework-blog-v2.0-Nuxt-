@@ -50,26 +50,27 @@ export default {
   data: () => ({
     loading: false,
     selection: 1,
-    serviceName: "User777",
-    servicePrice: "400грн.",
-    salonLocation: "Location",
-    salonName: "user email",
-    serviceDescription: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, labore!",
-    serviceRating: "4.5",
+    serviceName: 'User777',
+    servicePrice: '400грн.',
+    salonLocation: 'Location',
+    salonName: 'user email',
+    serviceDescription:
+      'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, labore!',
+    serviceRating: '4.5',
 
-    howManyVoted: "413",
+    howManyVoted: '413'
   }),
 
   methods: {
     reserve() {
       this.loading = true;
       setTimeout(() => (this.loading = false), 2000);
-    },
-  },
+    }
+  }
 };
 </script>
 
-<style lang="scss" scoped >
+<style lang="scss" scoped>
 // @import './../assets/fonts/fonts'; // dont working!!!!!!!!!!!!!!!! //todo edit import
 .service {
   margin: 0.5rem;
@@ -91,7 +92,7 @@ export default {
   line-height: 5px;
   color: #ffffff;
   text-shadow: 0 2px 2px rgb(0, 0, 0, 50%);
-  font-family: "Yanone Kaffeesatz", sans-serif;
+  font-family: 'Yanone Kaffeesatz', sans-serif;
   font-weight: 800;
 }
 .price_card {

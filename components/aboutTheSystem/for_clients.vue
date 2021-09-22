@@ -59,7 +59,7 @@
 </template>
 <script>
 export default {
-  layout: "forAuthUsers",
+  layout: 'forAuthUsers',
 };
 </script>
 <style scoped lang="scss">

@@ -69,10 +69,10 @@
 </template>
 
 <script>
-import pick from "lodash/pick";
+import pick from 'lodash/pick';
 
 export default {
-  name: "Item",
+  name: 'Item',
   props: {
     price: String,
     image: String,
@@ -87,14 +87,14 @@ export default {
       isEdit: false,
       form: {
         price: 0,
-        image: "",
-        description: "",
-        name: "",
+        image: '',
+        description: '',
+        name: '',
       },
       cardStyle: {
-        borderRadius: "",
-        width: "",
-        height: "",
+        borderRadius: '',
+        width: '',
+        height: '',
       },
     };
   },
@@ -103,15 +103,15 @@ export default {
       this.isEdit = !this.isEdit;
 
       if (!this.isEdit) {
-        this.$emit("edit", this.form);
+        this.$emit('edit', this.form);
       } else {
         const toEdit = pick(this, [
-          "price",
-          "image",
-          "description",
-          "width",
-          "height",
-          "borderRadius",
+          'price',
+          'image',
+          'description',
+          'width',
+          'height',
+          'borderRadius',
         ]);
 
         this.form = toEdit;

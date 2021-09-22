@@ -21,26 +21,24 @@
       >
       <h1 class="unauth">{{ unauthorized }}</h1>
     </div>
-    <h1 v-else>
-      {{ otherError }} ({{ error.statusCode }})
-    </h1>
+    <h1 v-else>{{ otherError }} ({{ error.statusCode }})</h1>
   </v-app>
 </template>
 
 <script>
 export default {
-  layout: "empty",
+  layout: 'empty',
   props: {
     error: {
       type: Object,
-      default: null,
-    },
+      default: null
+    }
   },
   data() {
     return {
-      pageNotFound: "404 Not Founds",
-      otherError: "An error occurred",
-      unauthorized: "Access allowed only for registered users",
+      pageNotFound: '404 Not Founds',
+      otherError: 'An error occurred',
+      unauthorized: 'Access allowed only for registered users'
     };
   },
   head() {
@@ -48,12 +46,12 @@ export default {
       this.error.statusCode === 404
         ? this.pageNotFound
         : this.otherError || this.error.statusCode === 401
-        ? this.unauthorized
-        : this.otherError;
+          ? this.unauthorized
+          : this.otherError;
     return {
-      title,
+      title
     };
-  },
+  }
 };
 </script>
 
@@ -70,7 +68,7 @@ export default {
   background-repeat: no-repeat;
   background-position: center;
   margin: 0 auto;
-  background-image: url("../assets/images/401 Error Unauthorized-amico.svg");
+  background-image: url('../assets/images/401 Error Unauthorized-amico.svg');
   position: relative;
   .unauthButton {
     position: absolute;
@@ -85,13 +83,13 @@ export default {
   }
 }
 .fo {
-  background-image: url("../assets/404-img.png");
+  background-image: url('../assets/404-img.png');
   background-repeat: no-repeat;
   background-size: 40%;
   background-position: top;
 }
 button {
-  font-family: "Varela Round", sans-serif;
+  font-family: 'Varela Round', sans-serif;
   background-color: transparent;
   border: 2px solid #eb6db4;
   color: #fff;
@@ -119,7 +117,7 @@ form {
 .p1 {
   color: #eb6db4;
   font-size: 24px;
-  font-family: "Dosis", sans-serif;
+  font-family: 'Dosis', sans-serif;
   vertical-align: middle;
   text-align: center;
   margin-top: 15rem;
@@ -132,7 +130,7 @@ form {
 .p2 {
   color: #eb6db4;
   font-size: 18px;
-  font-family: "Dosis", sans-serif;
+  font-family: 'Dosis', sans-serif;
   vertical-align: middle;
   text-align: center;
   margin-top: 1rem;
