@@ -48,14 +48,15 @@
         <div class="services__main_block">
           <h3 class="text_tittle">станьте одним із нас</h3>
           <section class="main_users">
-            <mainUsers />
-            <mainUsers />
-            <mainUsers />
-            <mainUsers />
-            <mainUsers />
-            <mainUsers />
-            <mainUsers />
-            <mainUsers />
+            <main-users />
+            <main-users />
+            <main-users />
+            <main-users />
+            <main-users />
+            <main-users />
+            <main-users />
+            <main-users />
+            <main-users />
           </section>
           <v-btn
             class="btn btn-1"
@@ -93,12 +94,6 @@ export default {
     loading: false,
     title: tittle,
   }),
-  methods: {
-    getMoreServices() {
-      this.loading = true;
-      console.log('Get more services logic here...');
-    },
-  },
   head() {
     return {
       title: this.title,
@@ -111,6 +106,12 @@ export default {
         },
       ],
     };
+  },
+  methods: {
+    getMoreServices() {
+      this.loading = true;
+      console.log('Get more services logic here...');
+    },
   },
 };
 </script>

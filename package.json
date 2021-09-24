@@ -11,6 +11,7 @@
     "lint:fix": "eslint --fix --ext .js,.vue --ignore-path .gitignore"
   },
   "dependencies": {
+    "-": "0.0.1",
     "@nuxtjs/axios": "^5.13.6",
     "axios": "^0.21.4",
     "config": "^3.3.6",
@@ -19,6 +20,7 @@
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "nuxt": "^2.15.3",
+    "vue": "^2.6.14",
     "vue-phone-number-input": "^1.1.10",
     "vuelidate": "^0.7.6",
     "vuetify": "^2.5.3"

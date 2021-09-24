@@ -30,16 +30,16 @@
       <v-spacer />
       <authComponent v-if="!loginIn" />
       <v-badge
+        v-if="loginIn"
         :content="messages"
         :value="messages"
         color="green"
         overlap
         class="awatar_main"
-        v-if="loginIn"
       >
         <v-row justify="center">
           <v-menu bottom min-width="200px" rounded offset-y>
-            <template v-slot:activator="{ on }">
+            <template #activator="{ on }">
               <v-btn icon x-large v-on="on">
                 <v-avatar color="brown" size="48">
                   <span class="white--text text-h5">
@@ -50,7 +50,7 @@
             </template>
             <v-card>
               <v-list-item-content class="justify-center">
-                <div class="mx-auto text-center" v-if="user">
+                <div v-if="user" class="mx-auto text-center">
                   <v-avatar color="brown">
                     <span class="white--text text-h5">
                       {{ user.firstName[0] }}{{ user.lastName[0] }}
@@ -79,7 +79,7 @@
     <v-snackbar v-model="snackbar" :timeout="timeout">
       {{ disconnectText }}
 
-      <template v-slot:action="{ attrs }">
+      <template #action="{ attrs }">
         <v-btn color="blue" text v-bind="attrs" @click="snackbar = false">
           Close
         </v-btn>
@@ -133,7 +133,7 @@ import { tittle } from '../config/default.json';
 
 export default {
   // TODO добавив мідлвар сюда
-  middleware: ['auth'],
+  // middleware: ['auth'],
   components: {
     authComponent,
   },

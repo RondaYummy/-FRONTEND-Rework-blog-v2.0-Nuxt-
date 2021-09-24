@@ -1,7 +1,7 @@
 <template>
   <div class="text-center">
     <v-bottom-sheet v-model="sheet" inset>
-      <template v-slot:activator="{ on, attrs }">
+      <template #activator="{ on, attrs }">
         <button class="unUser-open" v-bind="attrs" v-on="on">
           <div class="unUser-img">
             <v-icon>mdi-account-circle</v-icon>
@@ -28,18 +28,18 @@
                 <v-col cols="12" sm="6">
                   <v-text-field
                     v-model="email"
+                    :class="{
+                      errorMessage: errorMessage.message === 'AuthError',
+                    }"
+                    :rules="emailRules"
                     label="E-mail"
                     clearable
                     type="email"
                     autocomplete="email"
-                    :rules="emailRules"
+                    required
                     @input="$v.email.$touch()"
                     @blur="$v.email.$touch()"
                     @keydown.enter="signIn"
-                    required
-                    :class="{
-                      errorMessage: this.errorMessage.message === 'AuthError',
-                    }"
                   >
                   </v-text-field>
                 </v-col>
@@ -49,19 +49,19 @@
                     label="Password"
                     :counter="26"
                     :rules="passwordRules"
-                    @input="$v.password.$touch()"
-                    @blur="$v.password.$touch()"
+                    :class="{
+                      errorMessage: errorMessage.message === 'AuthError',
+                    }"
                     :type="show1 ? 'text' : 'password'"
                     :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                    @click:append="show1 = !show1"
                     required
                     loading
-                    :class="{
-                      errorMessage: this.errorMessage.message === 'AuthError',
-                    }"
+                    @click:append="show1 = !show1"
+                    @input="$v.password.$touch()"
+                    @blur="$v.password.$touch()"
                     @keydown.enter="signIn"
                   >
-                    <template v-slot:progress>
+                    <template #progress>
                       <v-progress-linear
                         :value="progress"
                         :color="color"
@@ -73,8 +73,8 @@
                 </v-col>
               </v-row>
               <h2
+                v-if="errorMessage.message === 'AuthError'"
                 class="errorMessage"
-                v-if="this.errorMessage.message === 'AuthError'"
               >
                 Перевірте будь ласка введені дані!
               </h2>
@@ -137,15 +137,24 @@ export default {
     loading: false,
     errorMessage: '',
     emailRules: [
-      v => !!v || 'Потрібний E-mail',
-      v => /.+@.+\..+/.test(v) || 'E-mail пошта повинна бути дійсною',
+      (v) => !!v || 'Потрібний E-mail',
+      (v) => /.+@.+\..+/.test(v) || 'E-mail пошта повинна бути дійсною',
     ],
     passwordRules: [
-      v => !!v || 'Потрібний пароль',
-      v => (v && v.length <= 26) || 'Пароль повинен мати не більше 26 символів.',
-      v => (v && v.length >= 8) || 'Пароль повинен мати не менше 8 символів.',
+      (v) => !!v || 'Потрібний пароль',
+      (v) =>
+        (v && v.length <= 26) || 'Пароль повинен мати не більше 26 символів.',
+      (v) => (v && v.length >= 8) || 'Пароль повинен мати не менше 8 символів.',
     ],
   }),
+  computed: {
+    progress() {
+      return Math.min(100, this.password.length * 6);
+    },
+    color() {
+      return ['error', 'warning', 'success'][Math.floor(this.progress / 40)];
+    },
+  },
   watch: {
     loader() {
       const l = this.loader;
@@ -190,14 +199,6 @@ export default {
             this.loading = false;
           });
       }
-    },
-  },
-  computed: {
-    progress() {
-      return Math.min(100, this.password.length * 6);
-    },
-    color() {
-      return ['error', 'warning', 'success'][Math.floor(this.progress / 40)];
     },
   },
 };

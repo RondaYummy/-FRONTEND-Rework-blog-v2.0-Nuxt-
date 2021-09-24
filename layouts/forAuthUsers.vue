@@ -127,7 +127,7 @@
     <v-snackbar v-model="snackbar" :timeout="timeout">
       {{ disconnectText }}
 
-      <template v-slot:action="{ attrs }">
+      <template #action="{ attrs }">
         <v-btn color="blue" text v-bind="attrs" @click="snackbar = false">
           Close
         </v-btn>

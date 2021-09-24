@@ -1,6 +1,6 @@
 <template>
   <v-app dark>
-    <div class="fo" v-if="error.statusCode === 404">
+    <div v-if="error.statusCode === 404" class="fo" >
       <p class="p1">Ця сторінка недоступна</p>
       <p class="p2">Ми обшукали весь Всесвіт, але не змогли її знайти.</p>
       <p class="p2 p3">
@@ -42,12 +42,14 @@ export default {
     };
   },
   head() {
-    const title =
-      this.error.statusCode === 404
-        ? this.pageNotFound
-        : this.otherError || this.error.statusCode === 401
-        ? this.unauthorized
-        : this.otherError;
+    let title;
+    if (this.error.statusCode === 404) {
+      title = this.pageNotFound;
+    } else if (this.error.statusCode === 401) {
+      title = this.unauthorized;
+    } else {
+      title = this.otherError;
+    }
     return {
       title,
     };

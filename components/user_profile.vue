@@ -11,7 +11,7 @@
       height="200px"
       scroll-target="#scrolling-techniques-3"
     >
-      <template v-slot:img="{ props }">
+      <template #img="{ props }">
         <v-img
           v-bind="props"
           gradient="to top right, rgba(100,115,201,.7), rgba(25,32,72,.7)"
@@ -52,7 +52,7 @@
       </v-btn>
 
       <v-menu bottom left>
-        <template v-slot:activator="{ on, attrs }">
+        <template #activator="{ on, attrs }">
           <v-btn icon color="yellow" v-bind="attrs" v-on="on">
             <v-icon>mdi-dots-vertical</v-icon>
           </v-btn>
@@ -65,8 +65,8 @@
         </v-list>
       </v-menu>
 
-      <template v-slot:extension>
-        <v-tabs align-with-title v-model="tab">
+      <template #extension>
+        <v-tabs v-model="tab" align-with-title>
           <v-tab v-for="item in itemsMenu" :key="item">
             {{ item }}
           </v-tab>
@@ -84,7 +84,7 @@
           <v-expansion-panels :value="0" class="exp_panel_block">
             <v-expansion-panel>
               <v-expansion-panel-header>
-                <template v-slot:default="{ open }">
+                <template #default="{ open }">
                   <v-row no-gutters>
                     <v-col cols="4"> Write a post? </v-col>
                     <v-col cols="8" class="text--secondary">
@@ -101,8 +101,8 @@
               <v-expansion-panel-content>
                 <v-text-field
                   v-model="descriptionPost"
-                  @keydown.enter="addPost"
                   placeholder="Write a post here..."
+                  @keydown.enter="addPost"
                 ></v-text-field>
               </v-expansion-panel-content>
             </v-expansion-panel>
@@ -143,19 +143,7 @@ import api from '../plugins/api';
 export default {
   components: {
     friendList,
-    postsList
-  },
-  async created() {
-    if (this.$store.state.user.user) {
-      this.user_data = await api
-        .getCurrentUser(this.$store.state.user.user._id)
-        .then(res => res.data.user);
-      this.title = `${this.user_data.firstName} ${this.user_data.lastName}`;
-      this.user_posts = await api
-        .getUserPosts(this.$store.state.user.user._id)
-        .then(res => res.data.data);
-      this.user_posts.reverse();
-    }
+    postsList,
   },
   data: () => ({
     title: `User`,
@@ -165,24 +153,13 @@ export default {
     items: [
       { title: 'Click Me' },
       { title: 'Click Me' },
-      { title: 'Click Me' }
+      { title: 'Click Me' },
     ],
     tab: null,
     itemsMenu: ['Main', 'Friends', 'Settings'],
     length: 5,
-    rating: 3.5
+    rating: 3.5,
   }),
-  methods: {
-    async addPost() {
-      const post = await api.addpost(this.$store.state.user.user._id, {
-        description: this.descriptionPost
-      });
-
-      this.user_posts.unshift(post.data.data);
-      // TODO коли добавляєш пост не появляються дані користувача бо не підтягується попуулейт, треба робити запит знову?
-      this.descriptionPost = '';
-    }
-  },
   head() {
     return {
       title: this.title,
@@ -191,11 +168,34 @@ export default {
         {
           hid: 'user',
           name: 'user',
-          content: 'My custom user'
-        }
-      ]
+          content: 'My custom user',
+        },
+      ],
     };
-  }
+  },
+  async created() {
+    if (this.$store.state.user.user) {
+      this.user_data = await api
+        .getCurrentUser(this.$store.state.user.user._id)
+        .then((res) => res.data.user);
+      this.title = `${this.user_data.firstName} ${this.user_data.lastName}`;
+      this.user_posts = await api
+        .getUserPosts(this.$store.state.user.user._id)
+        .then((res) => res.data.data);
+      this.user_posts.reverse();
+    }
+  },
+  methods: {
+    async addPost() {
+      const post = await api.addpost(this.$store.state.user.user._id, {
+        description: this.descriptionPost,
+      });
+
+      this.user_posts.unshift(post.data.data);
+      // TODO коли добавляєш пост не появляються дані користувача бо не підтягується попуулейт, треба робити запит знову?
+      this.descriptionPost = '';
+    },
+  },
 };
 </script>
 

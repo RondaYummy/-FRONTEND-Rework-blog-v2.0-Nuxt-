@@ -2,23 +2,23 @@
   <div class="item" :class="{ resizeBlock: isEdit }">
     <template v-if="isEdit">
       <h3>Name:</h3>
-      <input type="number" class="price" v-model="form.name" />
+      <input v-model="form.name" type="number" class="price" />
       <h3>Price:</h3>
-      <input type="number" class="price" v-model="form.price" />
+      <input v-model="form.price" type="number" class="price" />
       <h3>Description:</h3>
-      <input class="description" v-model="form.description" />
+      <input v-model="form.description" class="description" />
       <h3>Image Card</h3>
-      <input class="image" v-model="form.image" />
-      {{ this.cardStyle.height }}
+      <input v-model="form.image" class="image" />
+      {{ cardStyle.height }}
       <div class="slidecontainer">
         <h3>Border Radius {{ cardStyle.borderRadius }}</h3>
         <input
+          v-model="cardStyle.borderRadius"
           type="range"
           min="1"
           max="20"
           value="1"
           class="slider"
-          v-model="cardStyle.borderRadius"
         />
       </div>
     </template>
@@ -74,13 +74,34 @@ import pick from 'lodash/pick';
 export default {
   name: 'Item',
   props: {
-    price: String,
-    image: String,
-    description: String,
-    name: String,
-    width: Number,
-    height: Number,
-    borderRadius: Number,
+    price: {
+      type: String,
+      default: '',
+    },
+    image: {
+      type: String,
+      default: '',
+    },
+    description: {
+      type: String,
+      default: '',
+    },
+    name: {
+      type: String,
+      default: '',
+    },
+    width: {
+      type: String,
+      default: '',
+    },
+    height: {
+      type: String,
+      default: '',
+    },
+    borderRadius: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {

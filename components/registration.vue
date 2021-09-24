@@ -19,10 +19,10 @@
             autocomplete="email"
             label="E-mail"
             required
+            clearable
             @input="$v.email.$touch()"
             @blur="$v.email.$touch()"
             @keydown.enter="confirmEmailAndPass"
-            clearable
           ></v-text-field>
           <span class="text-caption grey--text text--darken-1">
             This is the email you will use to login to your Nikki - Nails
@@ -31,19 +31,19 @@
         </v-card-text>
         <v-card-text>
           <v-text-field
+            v-model="password"
             label="Password"
             :type="show1 ? 'text' : 'password'"
             :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-            @click:append="show1 = !show1"
             :counter="26"
-            required
-            v-model="password"
             :error-messages="passwordErrors"
+            required
+            loading
+            @click:append="show1 = !show1"
             @input="$v.password.$touch()"
             @blur="$v.password.$touch()"
             @keydown.enter="confirmEmailAndPass"
-            loading
-            ><template v-slot:progress>
+            ><template #progress>
               <v-progress-linear
                 :value="progress"
                 :color="color"
@@ -52,17 +52,17 @@
               ></v-progress-linear> </template
           ></v-text-field>
           <v-text-field
+            v-model="confirmPassword"
             label="Confirm Password"
             :type="show2 ? 'text' : 'password'"
             :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
-            @click:append="show2 = !show2"
-            required
-            v-model="confirmPassword"
             :error-messages="confirmPasswordErrors"
+            required
+            clearable
+            @click:append="show2 = !show2"
             @input="$v.confirmPassword.$touch()"
             @blur="$v.confirmPassword.$touch()"
             @keydown.enter="confirmEmailAndPass"
-            clearable
           ></v-text-field>
           <span class="text-caption grey--text text--darken-1">
             Please enter a password for your account
@@ -73,8 +73,8 @@
           <v-spacer></v-spacer>
 
           <v-btn
-            :disabled="step === 3"
             v-if="step !== 3"
+            :disabled="step === 3"
             color="primary"
             depressed
             @click="confirmEmailAndPass"
@@ -110,15 +110,15 @@
             ></v-text-field>
 
             <VuePhoneNumberInput
+              v-model="phone"
               type="tel"
               autocomplete="tel"
-              v-model="phone"
-              @update="updatePhone"
               :error="phoneError"
               maxlength="15"
               default-country-code="UA"
               clearable
               required
+              @update="updatePhone"
             />
             <v-select
               v-model="gender"
@@ -139,16 +139,16 @@
                 offset-y
                 min-width="auto"
               >
-                <template v-slot:activator="{ on, attrs }">
+                <template #activator="{ on, attrs }">
                   <v-text-field
                     v-model="date"
+                    :error-messages="dateErrors"
                     label="Birthday date"
                     prepend-icon="mdi-calendar"
                     readonly
+                    required
                     v-bind="attrs"
                     v-on="on"
-                    :error-messages="dateErrors"
-                    required
                     @change="$v.date.$touch()"
                     @blur="$v.date.$touch()"
                   ></v-text-field>
@@ -177,7 +177,7 @@
               @change="$v.TermsOfServiceAndPrivacyPolicy.$touch()"
               @blur="$v.TermsOfServiceAndPrivacyPolicy.$touch()"
             >
-              <template v-slot:label>
+              <template #label>
                 I agree to the&nbsp;
                 <a href="#" @click.stop.prevent="dialog = true">
                   Terms of Service
@@ -270,8 +270,8 @@
           <v-spacer></v-spacer>
 
           <v-btn
-            :disabled="step === 3"
             v-if="step !== 3"
+            :disabled="step === 3"
             color="primary"
             depressed
             @click="confirmPersonalInfo"
@@ -281,7 +281,7 @@
         </v-card-actions>
       </v-window-item>
 
-      <v-window-item :value="3" :class="{ ifError: this.errorMessage.errors }">
+      <v-window-item :value="3" :class="{ ifError: errorMessage.errors }">
         <div class="pa-4 text-center">
           <v-img
             class="mb-4"
@@ -304,8 +304,7 @@
             <h3>Номер телефону:</h3>
             {{ phone }}
           </span>
-          <span
-          class="text-h6 font-weight-light mb-2"
+          <span class="text-h6 font-weight-light mb-2"
             ><h3>Стать:</h3>
             <span v-if="gender === 'Male'">Чоловіча</span>
             <span v-if="gender === 'Female'">жіноча</span>
@@ -324,10 +323,7 @@
           </span>
 
           <span class="text-caption grey--text">Thanks for signing up!</span>
-          <h2
-            class="errorMessage"
-            v-if="this.errorMessage.errors === 'RegError'"
-          >
+          <h2 v-if="errorMessage.errors === 'RegError'" class="errorMessage">
             Такий користувач уже створений, перевірте введені дані!
           </h2>
         </div>
@@ -351,14 +347,14 @@ import {
   maxLength,
   email,
   minLength,
-  sameAs
+  sameAs,
 } from 'vuelidate/lib/validators';
 import VuePhoneNumberInput from 'vue-phone-number-input';
 import api from '../plugins/api';
 
 export default {
   components: {
-    VuePhoneNumberInput
+    VuePhoneNumberInput,
   },
   mixins: [validationMixin],
 
@@ -369,7 +365,7 @@ export default {
       required,
       maxLength: maxLength(26),
       minLength: minLength(8),
-      sameAsPassword: sameAs('password')
+      sameAsPassword: sameAs('password'),
     },
     firstName: { required, maxLength: maxLength(16), minLength: minLength(3) },
     lastName: { required, maxLength: maxLength(16), minLength: minLength(3) },
@@ -378,13 +374,8 @@ export default {
     TermsOfServiceAndPrivacyPolicy: {
       checked(val) {
         return val;
-      }
-    }
-  },
-  watch: {
-    menu(val) {
-      val && setTimeout(() => (this.activePicker = 'YEAR'));
-    }
+      },
+    },
   },
   data: () => ({
     step: 1,
@@ -408,99 +399,20 @@ export default {
     show2: false,
     title: 'Nikki - Nails | Registration',
     errorMessage: '',
-    phoneError: true
+    phoneError: true,
   }),
-
-  methods: {
-    updatePhone(e) {
-      if (!e.isValid) {
-        this.phoneError = true;
-      }
-      if (e.isValid) {
-        this.phoneError = false;
-      }
-    },
-    back() {
-      this.step -= 1;
-      this.errorMessage = '';
-    },
-    save(date) {
-      this.$refs.menu.save(date);
-    },
-    async submit() {
-      this.$v.$touch();
-      if (!this.$v.$invalid) {
-        // do your submit logic here
-        await api
-          .register({
-            email: this.email,
-            password: this.password,
-            firstName: this.firstName,
-            lastName: this.lastName,
-            gender: this.gender,
-            age: this.date,
-            phone: this.phone,
-            TermsOfServiceAndPrivacyPolicy: this.TermsOfServiceAndPrivacyPolicy
-          })
-          .then(() => {
-            api
-              .login({
-                email: this.email,
-                password: this.password
-              })
-              .then((response) => {
-                this.errorMessage = '';
-                this.$store.commit('user/add', response.data.user);
-                this.$router.push('/');
-              });
-          })
-
-          .catch(error => {
-            this.errorMessage = error.response.data || error.message;
-          });
-      }
-    },
-    confirmEmailAndPass() {
-      this.$v.email.$touch();
-      this.$v.password.$touch();
-      this.$v.confirmPassword.$touch();
-
-      if (
-        this.$v.email.$invalid ||
-        this.$v.password.$invalid ||
-        this.$v.confirmPassword.$invalid
-      ) {
-        console.log('ERROR');
-      } else {
-        // do your submit logic here
-        console.log('submit page: ', `${this.step}`);
-        return (this.step += 1);
-      }
-      return false;
-    },
-    confirmPersonalInfo() {
-      this.$v.firstName.$touch();
-      this.$v.lastName.$touch();
-      this.$v.date.$touch();
-      this.$v.gender.$touch();
-      this.$v.TermsOfServiceAndPrivacyPolicy.$touch();
-
-      if (
-        this.$v.firstName.$invalid ||
-        this.$v.lastName.$invalid ||
-        this.$v.date.$invalid ||
-        this.$v.gender.$invalid ||
-        this.phoneError ||
-        this.$v.TermsOfServiceAndPrivacyPolicy.$invalid
-      ) {
-        console.log('ERROR');
-      } else {
-        // do your submit logic here
-        console.log('submit page: ', `${this.step}`);
-        return (this.step += 1);
-      }
-      return false;
-    }
+  head() {
+    return {
+      title: this.title,
+      meta: [
+        // hid is used as unique identifier. Do not use `vmid` for it as it will not work
+        {
+          hid: 'salon',
+          name: 'salon',
+          content: 'My custom salon',
+        },
+      ],
+    };
   },
   computed: {
     currentTitle() {
@@ -587,21 +499,105 @@ export default {
         errors.push('The Last name must be at least 3 characters long');
       !this.$v.lastName.required && errors.push('Last name is required.');
       return errors;
-    }
+    },
   },
-  head() {
-    return {
-      title: this.title,
-      meta: [
-        // hid is used as unique identifier. Do not use `vmid` for it as it will not work
-        {
-          hid: 'salon',
-          name: 'salon',
-          content: 'My custom salon'
-        }
-      ]
-    };
-  }
+  watch: {
+    menu(val) {
+      val && setTimeout(() => (this.activePicker = 'YEAR'));
+    },
+  },
+
+  methods: {
+    updatePhone(e) {
+      if (!e.isValid) {
+        this.phoneError = true;
+      }
+      if (e.isValid) {
+        this.phoneError = false;
+      }
+    },
+    back() {
+      this.step -= 1;
+      this.errorMessage = '';
+    },
+    save(date) {
+      this.$refs.menu.save(date);
+    },
+    async submit() {
+      this.$v.$touch();
+      if (!this.$v.$invalid) {
+        // do your submit logic here
+        await api
+          .register({
+            email: this.email,
+            password: this.password,
+            firstName: this.firstName,
+            lastName: this.lastName,
+            gender: this.gender,
+            age: this.date,
+            phone: this.phone,
+            TermsOfServiceAndPrivacyPolicy: this.TermsOfServiceAndPrivacyPolicy,
+          })
+          .then(() => {
+            api
+              .login({
+                email: this.email,
+                password: this.password,
+              })
+              .then((response) => {
+                this.errorMessage = '';
+                this.$store.commit('user/add', response.data.user);
+                this.$router.push('/');
+              });
+          })
+
+          .catch((error) => {
+            this.errorMessage = error.response.data || error.message;
+          });
+      }
+    },
+    confirmEmailAndPass() {
+      this.$v.email.$touch();
+      this.$v.password.$touch();
+      this.$v.confirmPassword.$touch();
+
+      if (
+        this.$v.email.$invalid ||
+        this.$v.password.$invalid ||
+        this.$v.confirmPassword.$invalid
+      ) {
+        console.log('ERROR');
+      } else {
+        // do your submit logic here
+        console.log('submit page: ', `${this.step}`);
+        return (this.step += 1);
+      }
+      return false;
+    },
+    confirmPersonalInfo() {
+      this.$v.firstName.$touch();
+      this.$v.lastName.$touch();
+      this.$v.date.$touch();
+      this.$v.gender.$touch();
+      this.$v.TermsOfServiceAndPrivacyPolicy.$touch();
+
+      if (
+        this.$v.firstName.$invalid ||
+        this.$v.lastName.$invalid ||
+        this.$v.date.$invalid ||
+        this.$v.gender.$invalid ||
+        this.phoneError ||
+        this.$v.TermsOfServiceAndPrivacyPolicy.$invalid
+      ) {
+        console.log('ERROR');
+      } else {
+        // do your submit logic here
+        console.log('submit page: ', `${this.step}`);
+        return (this.step += 1);
+      }
+      return false;
+    },
+  },
 };
 </script>
 

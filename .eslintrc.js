@@ -11,7 +11,7 @@ module.exports = {
   },
   extends: [
     'plugin:vue/strongly-recommended',
-    'plugin:nuxt/strongly-recommended',
+    "plugin:nuxt/recommended",
     'airbnb-base',
     '@nuxtjs',
     'prettier'
@@ -34,6 +34,8 @@ module.exports = {
       "optionalDependencies": false,
       "peerDependencies": false
     }],
+    'no-console': process.env.NODE_ENV === 'production' ? 2 : 0,
+    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
   },
   globals: {
     $nuxt: true,

@@ -1,11 +1,11 @@
 <template>
   <section>
     <v-card
+      v-for="user in userPosts"
+      :key="user._id"
       class="mx-auto"
       max-width="800"
       outlined
-      v-for="user in user_posts"
-      :key="user._id"
     >
       <v-card-text>
         <div class="text-h6">{{ user.whoPosted.email }}</div>
@@ -21,9 +21,9 @@
         <v-btn text color="deep-purple accent-4"> Delete </v-btn>
       </v-card-actions>
       <commentList
-        :comments="user.comments"
         v-for="comment in user.comments"
         :key="comment._id"
+        :comments="user.comments"
       />
       <comment-field />
     </v-card>
@@ -35,7 +35,7 @@ import commentField from './comment_field.vue';
 import commentList from './comment_list.vue';
 
 export default {
-  props: ['user_posts'],
+  props: ['userPosts'],
   components: {
     commentField,
     commentList,
