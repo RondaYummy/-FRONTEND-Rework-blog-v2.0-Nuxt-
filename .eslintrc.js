@@ -10,14 +10,31 @@ module.exports = {
     parser: 'babel-eslint'
   },
   extends: [
-    'plugin:vue/recommended',
+    'plugin:vue/strongly-recommended',
+    'plugin:nuxt/strongly-recommended',
     'airbnb-base',
     '@nuxtjs',
-    'plugin:nuxt/recommended',
-    'some-other-config-you-use',
     'prettier'
   ],
-  rules: {},
+  rules: {
+    'no-underscore-dangle': ['error', {
+      allow: ['_id'],
+      allowAfterThis: true,
+      allowAfterSuper: false,
+      enforceInMethodNames: true,
+    }],
+    'no-param-reassign': ['error', {
+      props: false
+    }],
+    'no-await-in-loop': ['off'],
+    'no-restricted-syntax': ['off'],
+    'no-constant-condition': ['off'],
+    "import/no-extraneous-dependencies": ["error", {
+      "devDependencies": false,
+      "optionalDependencies": false,
+      "peerDependencies": false
+    }],
+  },
   globals: {
     $nuxt: true,
     mapkit: false
