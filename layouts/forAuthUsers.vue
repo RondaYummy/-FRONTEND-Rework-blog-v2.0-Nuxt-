@@ -1,6 +1,7 @@
 <template>
   <v-app light>
     <v-navigation-drawer
+      v-if="loginIn"
       v-model="drawer"
       :mini-variant="miniVariant"
       :clipped="clipped"
@@ -9,7 +10,6 @@
       mini-variant-width="74px"
       class="nav-drawer"
       permanent
-      v-if="loginIn"
     >
       <!--
   temporary - затемнення та показ поверх вікон
@@ -46,20 +46,20 @@
       <!-- navigation icon for nav drawer -->
       <v-app-bar-nav-icon
         v-if="miniVariant"
-        @click.stop="miniVariant = !miniVariant"
         class="navIcons"
+        @click.stop="miniVariant = !miniVariant"
       />
 
       <v-btn
-        icon
         v-if="!miniVariant"
-        @click.stop="miniVariant = !miniVariant"
+        icon
         class="navIcons"
+        @click.stop="miniVariant = !miniVariant"
       >
         <v-icon>mdi-account-arrow-left </v-icon>
       </v-btn>
       <!-- navigation icon for nav drawer -->
-      <div class="d38"></div>
+      <div class="d38" />
       <nuxt-link to="/" class="tittle">
         <v-toolbar-title v-text="title" />
       </nuxt-link>
@@ -78,16 +78,16 @@
       <authComponent v-if="!loginIn" />
 
       <v-badge
+        v-if="loginIn"
         :content="messages"
         :value="messages"
         color="green"
         overlap
         class="awatar_main"
-        v-if="loginIn"
       >
         <v-row justify="center">
           <v-menu bottom min-width="200px" rounded offset-y>
-            <template v-slot:activator="{ on }">
+            <template #activator="{ on }">
               <v-btn icon x-large v-on="on">
                 <v-avatar color="brown" size="48">
                   <span class="white--text text-h5">
@@ -98,7 +98,7 @@
             </template>
             <v-card>
               <v-list-item-content class="justify-center">
-                <div class="mx-auto text-center" v-if="user">
+                <div v-if="user" class="mx-auto text-center">
                   <v-avatar color="brown">
                     <span class="white--text text-h5">
                       {{ user.firstName[0] }}{{ user.lastName[0] }}
@@ -180,7 +180,7 @@ import { tittle } from '../config/default.json';
 
 export default {
   components: {
-    authComponent
+    authComponent,
   },
   data() {
     return {
@@ -201,20 +201,20 @@ export default {
         {
           icon: 'mdi-apps',
           title: 'Welcome',
-          to: '#'
+          to: '#',
         },
         {
           icon: 'mdi-chart-bubble',
           title: 'Inspire',
-          to: '#'
-        }
-      ]
+          to: '#',
+        },
+      ],
     };
   },
   computed: {
     user() {
       return this.$store.state.user.user;
-    }
+    },
   },
   watch: {
     user() {
@@ -222,7 +222,7 @@ export default {
     },
     group() {
       this.drawer = false;
-    }
+    },
   },
   methods: {
     async logout() {
@@ -233,8 +233,8 @@ export default {
     },
     getUser() {
       console.log('UserStore', this.$store.state.user.user);
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

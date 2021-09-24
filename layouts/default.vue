@@ -1,12 +1,6 @@
 <template>
   <v-app light>
-    <v-app-bar
-      fixed
-      app
-      height="80px"
-      class="app-bar"
-      flat
-      color="white">
+    <v-app-bar fixed app height="80px" class="app-bar" flat color="white">
       <div class="d38"></div>
       <nuxt-link to="/" class="tittle">
         <v-toolbar-title v-text="title" />
@@ -141,7 +135,7 @@ export default {
   // TODO добавив мідлвар сюда
   middleware: ['auth'],
   components: {
-    authComponent
+    authComponent,
   },
   data() {
     return {
@@ -157,13 +151,13 @@ export default {
       loading: false,
       items: [],
       search: null,
-      select: null
+      select: null,
     };
   },
   computed: {
     user() {
       return this.$store.state.user.user;
-    }
+    },
   },
   watch: {
     user() {
@@ -174,7 +168,7 @@ export default {
     },
     group() {
       this.drawer = false;
-    }
+    },
   },
   methods: {
     async logout(id) {
@@ -187,7 +181,7 @@ export default {
     onClick(user) {
       this.$router.push(`/user/${user._id}`);
     },
-    querySelections: debounce(function(name) {
+    querySelections: debounce(function (name) {
       this.loading = true;
       // String update
       if (this.name !== name) {
@@ -208,11 +202,11 @@ export default {
         .search(name)
         .then(({ data }) => {
           console.log(data);
-          data.candidate.forEach(item => this.data.push(item));
+          data.candidate.forEach((item) => this.data.push(item));
           this.page += 1;
           this.totalPages = data.total_pages;
         })
-        .catch(error => {
+        .catch((error) => {
           throw error;
         })
         .finally(() => {
@@ -221,8 +215,8 @@ export default {
     }, 500),
     getUser() {
       console.log('UserStore', this.$store.state.user.user);
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

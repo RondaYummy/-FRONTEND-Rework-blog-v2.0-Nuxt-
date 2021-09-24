@@ -31,14 +31,14 @@ export default {
   props: {
     error: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
   data() {
     return {
       pageNotFound: '404 Not Founds',
       otherError: 'An error occurred',
-      unauthorized: 'Access allowed only for registered users'
+      unauthorized: 'Access allowed only for registered users',
     };
   },
   head() {
@@ -46,12 +46,12 @@ export default {
       this.error.statusCode === 404
         ? this.pageNotFound
         : this.otherError || this.error.statusCode === 401
-          ? this.unauthorized
-          : this.otherError;
+        ? this.unauthorized
+        : this.otherError;
     return {
-      title
+      title,
     };
-  }
+  },
 };
 </script>
 

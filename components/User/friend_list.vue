@@ -1,6 +1,6 @@
 <template>
   <v-hover>
-    <template v-slot:default="{ hover }">
+    <template #default="{ hover }">
       <v-card max-width="310" class="mx-auto ma-3" :elevation="hover ? 24 : 6">
         <v-img
           src="https://cdn.vuetifyjs.com/images/lists/ali.png"

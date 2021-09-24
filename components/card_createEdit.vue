@@ -167,7 +167,7 @@ export default {
   transition: 0.3s ease-in-out;
 }
 .detail-link:before {
-  content: "5";
+  content: '5';
   font-family: FontAwesome;
   color: white;
   font-size: 20px;
@@ -215,17 +215,17 @@ export default {
   font-size: 14px;
 }
 .add-to-cart:after {
-  content: "1";
+  content: '1';
 }
 .add-to-wishlist:after {
-  content: "2";
+  content: '2';
 }
 .add-to-compare:after {
-  content: "3";
+  content: '3';
 }
 .product-list {
   margin: 20px 0;
-  font-family: "Open Sans", serif;
+  font-family: 'Open Sans', serif;
 }
 .product-list h3 {
   color: #555;
@@ -274,7 +274,7 @@ export default {
   text-align: center;
   border-bottom: 2px solid #f5f5f5;
   background: white;
-  font-family: "Open Sans";
+  font-family: 'Open Sans';
   transition: 0.3s ease-in;
   border-radius: 5px;
 }

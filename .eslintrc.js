@@ -13,22 +13,11 @@ module.exports = {
     'plugin:vue/recommended',
     'airbnb-base',
     '@nuxtjs',
-    'plugin:nuxt/recommended'
+    'plugin:nuxt/recommended',
+    'some-other-config-you-use',
+    'prettier'
   ],
-  rules: {
-    "linebreak-style": ["windows"],
-    "comma-dangle": ["error", "only-multiline"],
-    "semi": ['off'],
-    "space-before-function-paren": ['off'],
-    "curly": ['off'],
-    "arrow-parens": ['off'],
-    "no-underscore-dangle": ['off'],
-    "max-len": ["error", {
-      "code": 140,
-    }],
-    "no-nested-ternary": ['off'],
-    "import/no-extraneous-dependencies": [{ devDependencies: true }]
-  },
+  rules: {},
   globals: {
     $nuxt: true,
     mapkit: false

@@ -3,19 +3,19 @@
     <v-row justify="center" align="center">
       <v-col cols="12" sm="12" md="12">
         <section class="main-section mainContainer">
-          <h1 class="animated-word">{{ title }}</h1>
+          <h1 class="animated-word">
+            {{ title }}
+          </h1>
 
           <form>
             <div class="step__footer">
-              <nuxt-link
-              class="black__btn"
-              to="#"
-                >Знайти користувача</nuxt-link
-              >
+              <nuxt-link class="black__btn" to="#">
+                Знайти користувача
+              </nuxt-link>
             </div>
 
             <div class="step__footer">
-              <nuxt-link class="black__btn" to="#">Зареєструватись</nuxt-link>
+              <nuxt-link class="black__btn" to="#"> Зареєструватись </nuxt-link>
             </div>
           </form>
 
@@ -87,17 +87,17 @@ export default {
   components: {
     mainUsers,
     likedTheSystem,
-    aboutTheSystem
+    aboutTheSystem,
   },
   data: () => ({
     loading: false,
-    title: tittle
+    title: tittle,
   }),
   methods: {
     getMoreServices() {
       this.loading = true;
       console.log('Get more services logic here...');
-    }
+    },
   },
   head() {
     return {
@@ -107,16 +107,16 @@ export default {
         {
           hid: 'description',
           name: 'description',
-          content: 'My custom description'
-        }
-      ]
+          content: 'My custom description',
+        },
+      ],
     };
-  }
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-@import url('https://fonts.googleapis.com/css?family=Roboto:400', 100, 900);
+@import url('https://fonts.googleapis.com/css?family=Roboto:400');
 
 //colors button
 $white: #ffffff;
