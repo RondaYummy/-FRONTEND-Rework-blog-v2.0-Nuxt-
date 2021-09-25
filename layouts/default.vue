@@ -5,19 +5,7 @@
       <nuxt-link to="/" class="tittle">
         <v-toolbar-title v-text="title" />
       </nuxt-link>
-      <v-autocomplete
-        v-model="select"
-        :loading="loading"
-        :items="items"
-        :search-input.sync="search"
-        cache-items
-        class="mx-4"
-        flat
-        hide-no-data
-        hide-details
-        label="Search users?"
-        solo-inverted
-      ></v-autocomplete>
+      <search-form />
       <v-row>
         <nuxt-link to="/user">
           <v-chip class="ma-2" color="indigo darken-3" outlined>
@@ -126,16 +114,15 @@
 </template>
 
 <script>
-import debounce from 'lodash/debounce';
-import authComponent from '../components/authorization.vue';
 import api from '../plugins/api';
 import { tittle } from '../config/default.json';
+import authComponent from '../components/authorization.vue';
+import searchForm from '../components/searchForm.vue';
 
 export default {
-  // TODO добавив мідлвар сюда
-  // middleware: ['auth'],
   components: {
     authComponent,
+    searchForm,
   },
   data() {
     return {
@@ -163,9 +150,7 @@ export default {
     user() {
       this.loginIn = true;
     },
-    search(val) {
-      val && val !== this.select && this.querySelections(val);
-    },
+
     group() {
       this.drawer = false;
     },
@@ -178,41 +163,7 @@ export default {
       this.$router.push(`/`);
       console.log('Disconeting...');
     },
-    onClick(user) {
-      this.$router.push(`/user/${user._id}`);
-    },
-    querySelections: debounce(function (name) {
-      this.loading = true;
-      // String update
-      if (this.name !== name) {
-        this.name = name;
-        this.data = [];
-        this.page = 1;
-        this.totalPages = 1;
-      }
-      // String cleared
-      if (!name.length) {
-        this.data = [];
-        this.page = 1;
-        this.totalPages = 1;
-        return;
-      }
-      // TODO зробити пошук користувачів і перехід на профіль
-      api
-        .search(name)
-        .then(({ data }) => {
-          console.log(data);
-          data.candidate.forEach((item) => this.data.push(item));
-          this.page += 1;
-          this.totalPages = data.total_pages;
-        })
-        .catch((error) => {
-          throw error;
-        })
-        .finally(() => {
-          this.loading = false;
-        });
-    }, 500),
+
     getUser() {
       console.log('UserStore', this.$store.state.user.user);
     },

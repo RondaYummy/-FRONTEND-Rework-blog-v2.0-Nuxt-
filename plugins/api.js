@@ -12,8 +12,6 @@ const axios = Axios.create(baseConfig);
 
 axios.interceptors.request.use(config => {
   const token = sessionStorage.getItem('access');
-
-  // TODO налаштувати передачу токенів в хедер
   if (token) {
     return {
       ...config,
