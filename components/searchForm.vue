@@ -7,14 +7,55 @@
       :search-input.sync="search"
       :item-text="(item) => `${item.lastName} ${item.firstName}`"
       item-value="_id"
-      suffix="lastName"
+      suffix="Search"
       cache-items
       class="mx-4"
-      auto-select-first
-      hide-no-data
-      label="Search users?"
       clearable
+      solo
+      eager
+      deletable-chips
+      hide-details
+      label="e.g. Andrii H..."
+      @change="onClick(select)"
     >
+      <template #selection="{ attr, on, item, selected }">
+        <v-chip
+          v-bind="attr"
+          :input-value="selected"
+          color="blue-grey"
+          class="white--text"
+          v-on="on"
+        >
+          <v-icon v-if="item.gender === 'Male'">mdi-human-male</v-icon>
+          <v-icon v-else-if="item.gender === 'Female'">mdi-human-female</v-icon>
+          <v-list-item-title v-text="item.firstName"></v-list-item-title>
+          <v-list-item-subtitle v-text="item.lastName"></v-list-item-subtitle>
+        </v-chip>
+      </template>
+      <template #item="{ item }">
+        <v-list-item-avatar
+          color="indigo"
+          class="text-h5 font-weight-light white--text"
+        >
+          {{ item.lastName[0] }}{{ item.firstName[0] }}
+        </v-list-item-avatar>
+        <v-list-item-content>
+          <v-list-item-title v-text="item.firstName"></v-list-item-title>
+          <v-list-item-subtitle v-text="item.lastName"></v-list-item-subtitle>
+        </v-list-item-content>
+        <v-list-item-action>
+          <v-icon v-if="item.gender === 'Male'">mdi-human-male</v-icon>
+          <v-icon v-else-if="item.gender === 'Female'">mdi-human-female</v-icon>
+        </v-list-item-action>
+      </template>
+      <template #no-data>
+        <v-list-item>
+          <v-list-item-title>
+            Search for your favorite
+            <strong>friends</strong>
+          </v-list-item-title>
+        </v-list-item>
+      </template>
     </v-autocomplete>
   </section>
 </template>
@@ -34,25 +75,19 @@ export default {
   },
   watch: {
     search(val) {
+      // TODO доробити пошук ( коректно )
+      console.log('val', val); // val = input value
+      console.log('select', this.select); // select = _id
       val && val !== this.select && this.querySelections(val);
     },
   },
   methods: {
-    //  onClick(user) {
-    //    this.$router.push(`/user/${user._id}`);
-    //  },
+    onClick(user) {
+      this.$router.push(`/user/${user}`);
+    },
     querySelections: debounce(function (name) {
       this.loading = true;
-      // String update
-      if (this.name !== name) {
-        this.name = name;
-        this.data = [];
-      }
-      // String cleared
-      if (!name.length) {
-        this.data = [];
-        return;
-      }
+
       api
         .search(name)
         .then(({ data }) => {

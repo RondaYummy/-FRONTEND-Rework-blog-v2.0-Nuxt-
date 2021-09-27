@@ -1,5 +1,5 @@
 <template>
-  <v-card class="overflow-hidden">
+  <v-card v-if="userData" class="overflow-hidden">
     <v-app-bar
       absolute
       color="#6A76AB"
@@ -22,7 +22,7 @@
       <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
       <v-app-bar-title
-        >{{ user_data.firstName }} {{ user_data.lastName }}</v-app-bar-title
+        >{{ userData.firstName }} {{ userData.lastName }}</v-app-bar-title
       >
 
       <v-spacer></v-spacer>
@@ -89,7 +89,15 @@
                     <v-col cols="4"> Write a post? </v-col>
                     <v-col cols="8" class="text--secondary">
                       <v-fade-transition leave-absolute>
-                        <span v-if="open" key="0"> To add press "Enter" </span>
+                        <span v-if="open && $store.state.user.user._id" key="0">
+                          To add press "Enter"
+                        </span>
+                        <span
+                          v-if="open && !$store.state.user.user._id"
+                          key="0"
+                        >
+                          To write a post, you need to log in.
+                        </span>
                         <span v-else key="1">
                           {{ descriptionComment }}
                         </span>
@@ -101,6 +109,7 @@
               <v-expansion-panel-content>
                 <v-text-field
                   v-model="descriptionPost"
+                  :disabled="!$store.state.user.user._id"
                   placeholder="Write a post here..."
                   @keydown.enter="addPost"
                 ></v-text-field>
@@ -147,7 +156,7 @@ export default {
   },
   data: () => ({
     title: `User`,
-    user_data: {},
+    userData: {},
     user_posts: [],
     descriptionPost: '',
     items: [
@@ -174,13 +183,13 @@ export default {
     };
   },
   async created() {
-    if (this.$store.state.user.user) {
-      this.user_data = await api
-        .getCurrentUser(this.$store.state.user.user._id)
+    if (this.$route.params.id) {
+      this.userData = await api
+        .getCurrentUser(this.$route.params.id)
         .then((res) => res.data.user);
-      this.title = `${this.user_data.firstName} ${this.user_data.lastName}`;
+      this.title = `${this.userData.firstName} ${this.userData.lastName}`;
       this.user_posts = await api
-        .getUserPosts(this.$store.state.user.user._id)
+        .getUserPosts(this.$route.params.id)
         .then((res) => res.data.data);
       this.user_posts.reverse();
     }

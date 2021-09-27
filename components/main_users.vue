@@ -71,7 +71,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// @import './../assets/fonts/fonts'; // dont working!!!!!!!!!!!!!!!! //todo edit import
+// @import './../assets/fonts/fonts'; // dont working!!!!!!!!!!!!!!!! //TODO edit import
 .service {
   margin: 0.5rem;
 }
