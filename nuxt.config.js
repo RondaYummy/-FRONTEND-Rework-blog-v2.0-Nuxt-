@@ -86,20 +86,20 @@ export default {
   router: {
     extendRoutes(routes, resolve) {
       routes.push({
-          name: '/registration',
-          path: '/registration',
-          component: resolve(__dirname, 'components/registration.vue'),
-        }),
-        routes.push({
-          name: '/user',
-          path: '/user/:id',
-          component: resolve(__dirname, 'components/user_profile.vue')
-        }),
-        routes.push({
-          name: '/for_clients',
-          path: '/for_clients',
-          component: resolve(__dirname, 'components/aboutTheSystem/for_clients.vue'),
-        })
+        name: '/registration',
+        path: '/registration',
+        component: resolve(__dirname, 'components/registration.vue'),
+      });
+      routes.push({
+        name: '/user',
+        path: '/user/:id',
+        component: resolve(__dirname, 'components/user_profile.vue')
+      });
+      routes.push({
+        name: '/for_clients',
+        path: '/for_clients',
+        component: resolve(__dirname, 'components/aboutTheSystem/for_clients.vue'),
+      });
       return routes;
     },
 

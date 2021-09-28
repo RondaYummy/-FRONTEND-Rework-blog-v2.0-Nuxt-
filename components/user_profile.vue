@@ -99,7 +99,7 @@
                           To write a post, you need to log in.
                         </span>
                         <span v-else key="1">
-                          {{ descriptionComment }}
+                          {{ descriptionPost }}
                         </span>
                       </v-fade-transition>
                     </v-col>

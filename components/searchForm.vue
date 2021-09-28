@@ -5,7 +5,7 @@
       :loading="loading"
       :items="people"
       :search-input.sync="search"
-      :item-text="(item) => `${item.lastName} ${item.firstName}`"
+      :item-text="people"
       item-value="_id"
       suffix="Search"
       cache-items
@@ -16,7 +16,7 @@
       deletable-chips
       hide-details
       label="e.g. Andrii H..."
-      @change="onClick(select)"
+      @change="onClick"
     >
       <template #selection="{ attr, on, item, selected }">
         <v-chip
@@ -75,15 +75,16 @@ export default {
   },
   watch: {
     search(val) {
-      // TODO доробити пошук ( коректно )
       console.log('val', val); // val = input value
       console.log('select', this.select); // select = _id
       val && val !== this.select && this.querySelections(val);
     },
   },
   methods: {
-    onClick(user) {
-      this.$router.push(`/user/${user}`);
+    onClick() {
+      if (this.select !== null) {
+        this.$router.push(`/user/${this.select}`);
+      }
     },
     querySelections: debounce(function (name) {
       this.loading = true;
@@ -92,7 +93,6 @@ export default {
         .search(name)
         .then(({ data }) => {
           this.people = data.users;
-          console.log(this.people);
         })
         .catch((error) => {
           throw error;

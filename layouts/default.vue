@@ -5,15 +5,8 @@
       <nuxt-link to="/" class="tittle">
         <v-toolbar-title v-text="title" />
       </nuxt-link>
+
       <search-form />
-      <v-row>
-        <nuxt-link to="/user">
-          <v-chip class="ma-2" color="indigo darken-3" outlined>
-            <v-icon left> mdi-fire </v-icon>
-            Profil
-          </v-chip>
-        </nuxt-link>
-      </v-row>
 
       <v-spacer />
       <authComponent v-if="!loginIn" />
@@ -161,11 +154,10 @@ export default {
       // TODO Продумати логіку дисконекту
       this.snackbar = true;
       this.$router.push(`/`);
-      console.log('Disconeting...');
     },
 
     getUser() {
-      console.log('UserStore', this.$store.state.user.user);
+      this.$router.push(`user/${this.$store.state.user.user._id}`);
     },
   },
 };
