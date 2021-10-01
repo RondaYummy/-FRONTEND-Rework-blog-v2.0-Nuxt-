@@ -10,8 +10,9 @@
                 <span v-if="open && $store.state.user.user._id" key="0">
                   To add press "Enter"
                 </span>
-                <span v-else-if="open && !$store.state.user.user._id" key="0"
-                  >To write a comment, you need to log in.
+                <span v-else-if="open && !$store.state.user.user._id" key="0">
+                  <v-icon class="mdi-18px"> mdi-login </v-icon>
+                  To write a comment, you need to log in.
                 </span>
                 <span v-else key="1">
                   {{ descriptionComment }}
@@ -30,6 +31,28 @@
         />
       </v-expansion-panel-content>
     </v-expansion-panel>
+    <v-snackbar v-model="snackbar">
+      {{ text }}
+      <template #action="{ attrs }">
+        <v-btn color="green" text v-bind="attrs" @click="snackbar = false">
+          Ok
+        </v-btn>
+      </template>
+    </v-snackbar>
+
+    <v-snackbar v-model="snackbarDontAdded">
+      {{ textNoAdd }}
+      <template #action="{ attrs }">
+        <v-btn
+          color="red"
+          text
+          v-bind="attrs"
+          @click="snackbarDontAdded = false"
+        >
+          Ok
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-expansion-panels>
 </template>
 
@@ -37,16 +60,31 @@
 import api from '../../plugins/api';
 
 export default {
+  props: {
+    idPost: String,
+  },
   data: () => ({
     descriptionComment: '',
+    snackbar: false,
+    snackbarDontAdded: false,
+    text: `Comment successfully added.`,
+    textNoAdd: `Error. No comment added..`,
   }),
   methods: {
     async addComment() {
-      const postId = 123;
-      await api.addComment(postId, {
-        description: this.descriptionComment,
-        // user, // користувач якому постять коммент
-      });
+      await api
+        .addComment(this.idPost, {
+          description: this.descriptionComment,
+          user: this.$route.params.id, // користувач якому постять коммент
+          whoPosted: this.$store.state.user.user._id,
+        })
+        .then(() => {
+          this.snackbar = true;
+          this.descriptionComment = '';
+        })
+        .catch(() => {
+          this.snackbarDontAdded = true;
+        });
     },
   },
 };

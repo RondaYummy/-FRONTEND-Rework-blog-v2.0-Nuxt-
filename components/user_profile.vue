@@ -1,6 +1,7 @@
 <template>
   <v-card v-if="userData" class="overflow-hidden">
     <v-app-bar
+      pp-bar
       absolute
       color="#6A76AB"
       dark
@@ -19,51 +20,67 @@
       </template>
 
       <!-- Для малих розмірів екрана можна використати замість нижніж -->
-      <v-app-bar-nav-icon></v-app-bar-nav-icon>
+      <!-- <v-app-bar-nav-icon></v-app-bar-nav-icon> -->
 
-      <v-app-bar-title
-        >{{ userData.firstName }} {{ userData.lastName }}</v-app-bar-title
-      >
+      <v-app-bar-title class="ml-7 text-h3">
+        {{ userData.firstName }} {{ userData.lastName }}
+      </v-app-bar-title>
 
       <v-spacer></v-spacer>
-      <div class="text-center d-flex">
-        <span class="font-weight-bold pt-2">
-          {{ rating }}
-        </span>
-        <div class="text-center">
-          <v-rating
-            v-model="rating"
-            color="yellow darken-3"
-            background-color="grey darken-1"
-            empty-icon="$ratingFull"
-            half-increments
-            hover
-            large
-          ></v-rating>
-        </div>
-      </div>
 
-      <v-btn icon>
-        <v-icon>mdi-magnify</v-icon>
-      </v-btn>
-
-      <v-btn icon>
-        <v-icon>mdi-heart</v-icon>
-      </v-btn>
-
-      <v-menu bottom left>
-        <template #activator="{ on, attrs }">
-          <v-btn icon color="yellow" v-bind="attrs" v-on="on">
-            <v-icon>mdi-dots-vertical</v-icon>
+      <v-tooltip
+        v-if="
+          $store.state.user.user && $store.state.user.user._id !== userData._id
+        "
+        bottom
+      >
+        <template
+          v-if="
+            $store.state.user.user &&
+            $store.state.user.user._id !== userData._id
+          "
+          #activator="{ on, attrs }"
+        >
+          <v-btn
+            icon
+            bottom
+            left
+            :disabled="!$store.state.user.user._id"
+            @click="addToFavorites"
+          >
+            <v-icon
+              :color="isFavorite ? 'red' : 'white'"
+              large
+              v-bind="attrs"
+              v-on="on"
+              >mdi-heart</v-icon
+            >
           </v-btn>
         </template>
+        <span> {{ isFavorite ? delFav : addFav }} </span>
+      </v-tooltip>
 
-        <v-list>
-          <v-list-item v-for="(item, i) in items" :key="i">
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
+      <v-tooltip
+        v-if="
+          $store.state.user.user && $store.state.user.user._id !== userData._id
+        "
+        bottom
+      >
+        <template #activator="{ on, attrs }">
+          <v-btn
+            icon
+            bottom
+            left
+            :disabled="!$store.state.user.user._id"
+            @click="addToFriends"
+          >
+            <v-icon large v-bind="attrs" v-on="on">
+              {{ isFriend ? 'mdi-account-remove' : 'mdi-account-plus' }}
+            </v-icon>
+          </v-btn>
+        </template>
+        <span> {{ isFriend ? delFriend : addFriend }}</span>
+      </v-tooltip>
 
       <template #extension>
         <v-tabs v-model="tab" align-with-title>
@@ -96,6 +113,7 @@
                           v-if="open && !$store.state.user.user._id"
                           key="0"
                         >
+                          <v-icon class="mdi-18px"> mdi-login </v-icon>
                           To write a post, you need to log in.
                         </span>
                         <span v-else key="1">
@@ -130,13 +148,14 @@
             <friend-list />
             <friend-list />
             <friend-list />
-            <friend-list />
           </v-card>
         </v-tab-item>
 
+        <!-- // TODO добавити відображення настройок тільки на власному профілі, в created провіряти чи профіль є користувача 
+        і якщо користуваа то пушити в масив itemsMenu.push('Settings') і відображати це меню а при переході на цей пункт робити запит по АПІ і на бекенді тоже профіряти чи профіль є користувача. -->
         <v-tab-item>
           <v-card flat class="d-flex flex-wrap justify-space-around">
-            <h1>Services page</h1>
+            <h1>Settings page</h1>
           </v-card>
         </v-tab-item>
       </v-tabs-items>
@@ -159,13 +178,17 @@ export default {
     userData: {},
     user_posts: [],
     descriptionPost: '',
+    delFav: 'Delete user from favorites',
+    delFriend: 'Delete user from friends',
+    addFav: 'Add user to "favorites"',
+    addFriend: 'Add user to friends',
     items: [
       { title: 'Click Me' },
       { title: 'Click Me' },
       { title: 'Click Me' },
     ],
     tab: null,
-    itemsMenu: ['Main', 'Friends', 'Settings'],
+    itemsMenu: ['Main', 'Friends'],
     length: 5,
     rating: 3.5,
   }),
@@ -182,6 +205,15 @@ export default {
       ],
     };
   },
+  computed: {
+    // TODO добавити сюди логіку провірки чи є користувач другом / у ибраному
+    isFriend() {
+      return true;
+    },
+    isFavorite() {
+      return true;
+    },
+  },
   async created() {
     if (this.$route.params.id) {
       this.userData = await api
@@ -194,15 +226,36 @@ export default {
       this.user_posts.reverse();
     }
   },
+
   methods: {
     async addPost() {
-      const post = await api.addpost(this.$store.state.user.user._id, {
+      const post = await api.addpost(this.$route.params.id, {
         description: this.descriptionPost,
+        whoPosted: this.$store.state.user.user._id,
       });
 
       this.user_posts.unshift(post.data.data);
       // TODO коли добавляєш пост не появляються дані користувача бо не підтягується попуулейт, треба робити запит знову?
       this.descriptionPost = '';
+    },
+    // TODO добавити логіку добавлення в друзі та вибране
+    addToFavorites() {
+      if (this.isFavorite) {
+        console.log('deleted from favorites');
+        this.isFavorite = false;
+      } else {
+        console.log('added to favorites');
+        this.isFavorite = true;
+      }
+    },
+    addToFriends() {
+      if (this.isFriend) {
+        console.log('deleted from friends');
+        this.isFriend = false;
+      } else {
+        console.log('added to friends');
+        this.isFriend = true;
+      }
     },
   },
 };

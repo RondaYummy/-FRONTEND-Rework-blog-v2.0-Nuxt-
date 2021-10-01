@@ -11,7 +11,6 @@
       cache-items
       class="mx-4"
       clearable
-      solo
       eager
       deletable-chips
       hide-details
@@ -39,14 +38,18 @@
         >
           {{ item.lastName[0] }}{{ item.firstName[0] }}
         </v-list-item-avatar>
-        <v-list-item-content>
-          <v-list-item-title v-text="item.firstName"></v-list-item-title>
-          <v-list-item-subtitle v-text="item.lastName"></v-list-item-subtitle>
-        </v-list-item-content>
         <v-list-item-action>
           <v-icon v-if="item.gender === 'Male'">mdi-human-male</v-icon>
           <v-icon v-else-if="item.gender === 'Female'">mdi-human-female</v-icon>
         </v-list-item-action>
+        <v-list-item-content>
+          <v-list-item-title v-text="item.firstName"></v-list-item-title>
+          <v-list-item-subtitle v-text="item.lastName"></v-list-item-subtitle>
+        </v-list-item-content>
+        <v-list-item-content>
+          <v-list-item-title v-text="item.email"></v-list-item-title>
+          <v-list-item-subtitle v-text="item.phone"></v-list-item-subtitle>
+        </v-list-item-content>
       </template>
       <template #no-data>
         <v-list-item>
@@ -75,8 +78,8 @@ export default {
   },
   watch: {
     search(val) {
-      console.log('val', val); // val = input value
-      console.log('select', this.select); // select = _id
+      // console.log('val', val); // val = input value
+      // console.log('select', this.select); // select = _id
       val && val !== this.select && this.querySelections(val);
     },
   },

@@ -57,16 +57,8 @@ export default {
     serviceDescription:
       'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, labore!',
     serviceRating: '4.5',
-
     howManyVoted: '413',
   }),
-
-  methods: {
-    reserve() {
-      this.loading = true;
-      setTimeout(() => (this.loading = false), 2000);
-    },
-  },
 };
 </script>
 

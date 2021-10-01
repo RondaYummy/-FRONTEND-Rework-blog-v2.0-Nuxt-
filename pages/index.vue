@@ -15,7 +15,9 @@
             </div>
 
             <div class="step__footer">
-              <nuxt-link class="black__btn" to="#"> Зареєструватись </nuxt-link>
+              <nuxt-link class="black__btn" to="/registration">
+                Зареєструватись
+              </nuxt-link>
             </div>
           </form>
 
@@ -48,7 +50,6 @@
         <div class="services__main_block">
           <h3 class="text_tittle">станьте одним із нас</h3>
           <section class="main_users">
-            <main-users />
             <main-users />
             <main-users />
             <main-users />

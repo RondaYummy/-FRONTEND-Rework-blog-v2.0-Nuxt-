@@ -1,15 +1,17 @@
-<template v-for="comment in comments" :key="comment._id">
+<template >
   <v-card class="mx-auto main_block_comment" max-width="700" outlined>
     <v-card-text>
-      <div class="text-h6">basrers@ukr.net {{ comments.whoPosted }}</div>
-      <p class="text-h6 text--primary">
-        Halevych Andrii {{ comments.whoPosted }}
+      <span class="text-h6"> {{ whoPosted }}</span>
+
+      <div>{{ createdAt }}</div>
+      <p class="text-h6 text--primary d-flex justify-space-between">
+        {{ description }}
       </p>
       <div class="text--primary">
-        {{ comments.description }}
+        <!-- {{ comments }} -->
       </div>
     </v-card-text>
-    <v-card-actions>
+    <v-card-actions class="mt-n4 mb-n4 ml-n2">
       <v-btn text color="deep-purple accent-4"> Edit </v-btn>
       <v-btn text color="deep-purple accent-4"> Delete </v-btn>
     </v-card-actions>
@@ -18,7 +20,7 @@
 
 <script>
 export default {
-  props: ['comments'],
+  props: ['description', 'updated-at', 'who-posted', 'created-at'],
 };
 </script>
 
