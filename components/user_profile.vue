@@ -137,7 +137,7 @@
 
           <v-card flat>
             <v-card class="mx-auto" max-width="800" :elevation="0">
-              <posts-list class="main_post_block" :user_posts="user_posts" />
+              <posts-list class="main_post_block" :user_posts="user_posts" :user="user" v-for="user in user_posts" :key="user._id"/>
             </v-card>
           </v-card>
         </v-tab-item>
@@ -226,7 +226,6 @@ export default {
       this.user_posts.reverse();
     }
   },
-
   methods: {
     async addPost() {
       const post = await api.addpost(this.$route.params.id, {

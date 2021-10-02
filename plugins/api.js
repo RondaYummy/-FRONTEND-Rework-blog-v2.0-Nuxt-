@@ -43,6 +43,15 @@ export default {
   addpost(id, v) {
     return axios.post(`/user/${id}/posts`, v);
   },
+  deletePost(id) {
+    // TODO видаляти також всі коменти доробити
+    return axios.delete(`/posts/${id}`);
+  },
+  editPost(description, id) {
+    return axios.put(`/user/post/${id}`, {
+      description
+    })
+  },
   addComment(idPost, v) {
     return axios.post(`/posts/${idPost}/comments`, v);
   },
