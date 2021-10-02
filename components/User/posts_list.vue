@@ -26,9 +26,9 @@
           </div>
           <v-text-field
             v-if="arrEditedposts.find((e) => e._id === user._id)"
-            :value="user.description"
-            label="Edit here..."
             v-model="desc"
+            label="Edit here..."
+            @keydown.enter="saveEditPost(desc, user._id)"
           >
           </v-text-field>
         </v-card-text>
@@ -74,15 +74,8 @@
           </div>
         </v-card-actions>
       </v-card>
+      <commentList :postId="user._id" />
 
-      <commentList
-        v-for="comment in user.comments"
-        :key="comment._id"
-        :description="comment.description"
-        :updated-at="comment.updatedAt"
-        :created-at="comment.createdAt"
-        :who-posted="comment.whoPosted"
-      />
       <comment-field :idPost="user._id" />
     </section>
   </section>
@@ -102,7 +95,7 @@ export default {
   data() {
     return {
       arrEditedposts: [],
-      desc: '',
+      desc: this.user.description,
     };
   },
   methods: {

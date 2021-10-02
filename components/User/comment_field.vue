@@ -82,7 +82,7 @@ export default {
           this.snackbar = true;
           this.descriptionComment = '';
         })
-        .catch(() => {
+        .catch((e) => {
           this.snackbarDontAdded = true;
         });
     },

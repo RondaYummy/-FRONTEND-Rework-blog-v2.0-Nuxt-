@@ -55,6 +55,12 @@ export default {
   addComment(idPost, v) {
     return axios.post(`/posts/${idPost}/comments`, v);
   },
+  getPostComments(postId) {
+    return axios.get(`/posts/${postId}/comments/`);
+  },
+  deleteComment(id) {
+    return axios.delete(`/posts/${id}/comment`);
+  },
   getUserPosts(id) {
     return axios.get(`/user/${id}/posts/`);
   },
