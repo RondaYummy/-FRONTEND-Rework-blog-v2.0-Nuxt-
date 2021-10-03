@@ -40,6 +40,15 @@ export default {
   getCurrentUser(id) {
     return axios.get(`/user/${id}`);
   },
+  addToFavorite(id) {
+    return axios.post(`/user/${id}/favorite`);
+  },
+  deleteFromFavorite(id) {
+    return axios.delete(`/user/${id}/favorite`);
+  },
+  // addToFriends(id) {
+  // return axios.post(`/user/${id}/friends`);
+  // },
   addpost(id, v) {
     return axios.post(`/user/${id}/posts`, v);
   },

@@ -49,7 +49,7 @@
             @click="addToFavorites"
           >
             <v-icon
-              :color="isFavorite ? 'red' : 'white'"
+              :color="isFavorited ? 'red' : 'white'"
               large
               v-bind="attrs"
               v-on="on"
@@ -57,7 +57,7 @@
             >
           </v-btn>
         </template>
-        <span> {{ isFavorite ? delFav : addFav }} </span>
+        <span> {{ isFavorited ? delFav : addFav }} </span>
       </v-tooltip>
 
       <v-tooltip
@@ -188,6 +188,7 @@ export default {
     delFriend: 'Delete user from friends',
     addFav: 'Add user to "favorites"',
     addFriend: 'Add user to friends',
+    isFavorited: null,
     items: [
       { title: 'Click Me' },
       { title: 'Click Me' },
@@ -216,20 +217,29 @@ export default {
     isFriend() {
       return true;
     },
-    isFavorite() {
-      return true;
-    },
+    // isFavorited() {
+    //   return this.thisUser
+    //     ? this.thisUser.favorites.includes(this.userData._id, 0)
+    //     : false;
+    // },
   },
   async created() {
     if (this.$route.params.id) {
       this.userData = await api
         .getCurrentUser(this.$route.params.id)
         .then((res) => res.data.user);
+
       this.title = `${this.userData.firstName} ${this.userData.lastName}`;
       this.user_posts = await api
         .getUserPosts(this.$route.params.id)
         .then((res) => res.data.data);
       this.user_posts.reverse();
+    }
+    if (this.$store.state.user.user && this.$store.state.user.user._id) {
+      this.thisUser = await api
+        .getCurrentUser(this.$store.state.user.user._id)
+        .then((res) => res.data.user);
+      this.isFavorited = this.thisUser.favorites.includes(this.userData._id, 0);
     }
   },
   methods: {
@@ -240,26 +250,23 @@ export default {
       });
 
       this.user_posts.unshift(post.data.data);
-      // TODO коли добавляєш пост не появляються дані користувача бо не підтягується попуулейт, треба робити запит знову?
       this.descriptionPost = '';
     },
     // TODO добавити логіку добавлення в друзі та вибране
-    addToFavorites() {
-      if (this.isFavorite) {
-        console.log('deleted from favorites');
-        this.isFavorite = false;
+    async addToFavorites() {
+      if (this.isFavorited) {
+        await api.deleteFromFavorite(this.$route.params.id);
+        this.isFavorited = false;
       } else {
-        console.log('added to favorites');
-        this.isFavorite = true;
+        await api.addToFavorite(this.$route.params.id);
+        this.isFavorited = true;
       }
     },
     addToFriends() {
       if (this.isFriend) {
         console.log('deleted from friends');
-        this.isFriend = false;
       } else {
         console.log('added to friends');
-        this.isFriend = true;
       }
     },
   },
