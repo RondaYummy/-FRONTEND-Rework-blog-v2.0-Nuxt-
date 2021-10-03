@@ -137,7 +137,13 @@
 
           <v-card flat>
             <v-card class="mx-auto" max-width="800" :elevation="0">
-              <posts-list class="main_post_block" :user_posts="user_posts" :user="user" v-for="user in user_posts" :key="user._id"/>
+              <posts-list
+                v-for="user in user_posts"
+                :key="user._id"
+                class="main_post_block"
+                :user_posts="user_posts"
+                :user="user"
+              />
             </v-card>
           </v-card>
         </v-tab-item>

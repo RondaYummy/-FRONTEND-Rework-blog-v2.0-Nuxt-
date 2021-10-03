@@ -53,7 +53,7 @@
               "
               text
               color="green darken-1"
-              @click="saveEditPost(desc, user._id)"
+              @click="saveEditPost(user._id, desc)"
             >
               SAVE
             </v-btn>
@@ -74,7 +74,11 @@
           </div>
         </v-card-actions>
       </v-card>
-      <commentList :postId="user._id" />
+      <commentList
+        v-for="(coment, index) of comments"
+        :key="index"
+        :coment="coment"
+      />
 
       <comment-field :idPost="user._id" />
     </section>
@@ -96,7 +100,13 @@ export default {
     return {
       arrEditedposts: [],
       desc: this.user.description,
+      comments: [],
     };
+  },
+  async created() {
+    this.comments = await api
+      .getPostComments(this.user._id)
+      .then((comments) => comments.data.data);
   },
   methods: {
     /* eslint vue/no-mutating-props: 0 */
@@ -110,8 +120,8 @@ export default {
     editPost(post) {
       this.arrEditedposts.push(post);
     },
-    async saveEditPost(description, postId) {
-      const currentPost = await api.editPost(description, postId);
+    async saveEditPost(postId, description) {
+      const currentPost = await api.editPost(postId, { description });
       this.arrEditedposts.splice(
         this.arrEditedposts.findIndex((el) => el._id === postId),
         1

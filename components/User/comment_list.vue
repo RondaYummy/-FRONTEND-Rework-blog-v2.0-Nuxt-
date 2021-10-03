@@ -1,14 +1,7 @@
 <template >
   <section>
-    <v-card
-      v-for="(coment, index) of comments"
-      :key="index"
-      class="mx-auto main_block_comment"
-      max-width="90%"
-      outlined
-      shaped
-    >
-      <v-card-text v-if="comments.length">
+    <v-card class="mx-auto main_block_comment" max-width="90%" outlined shaped>
+      <v-card-text>
         <div class="d-flex justify-space-between">
           <span class="text-h6">
             {{ coment.whoPosted.firstName }}
@@ -54,7 +47,7 @@
             "
             text
             color="green darken-1"
-            @click="saveEditComment(desc, coment._id)"
+            @click="saveEditComment(coment._id, desc)"
           >
             SAVE
           </v-btn>
@@ -78,30 +71,29 @@
   </section>
 </template>
 
-
 <script>
+/* eslint vue/no-mutating-props: 0 */
 import api from '../../plugins/api';
 
 export default {
-  props: ['postId'],
+  props: ['coment'],
   data() {
     return {
-      comments: [],
       arrEditedComments: [],
-      desc: '',
+      desc: this.coment.description,
     };
   },
-  async created() {
-    this.comments = await api
-      .getPostComments(this.postId)
-      .then((comments) => comments.data.data);
-  },
+
   methods: {
     editComment(coment) {
       this.arrEditedComments.push(coment);
     },
-    saveEditComment(desc, id) {
-      console.log('x');
+    async saveEditComment(id, description) {
+      await api.editComment(id, { description });
+      this.arrEditedComments.splice(
+        this.arrEditedComments.findIndex((el) => el._id === this.coment._id),
+        1
+      );
     },
     async deleteComment(id) {
       await api.deleteComment(id);
