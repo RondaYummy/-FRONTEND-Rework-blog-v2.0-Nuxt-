@@ -78,9 +78,10 @@ export default {
           user: this.$route.params.id, // користувач якому постять коммент
           whoPosted: this.$store.state.user.user._id,
         })
-        .then(() => {
+        .then((data) => {
           this.snackbar = true;
           this.descriptionComment = '';
+          this.$emit('commentsAdd', data.data.data);
         })
         .catch((e) => {
           this.snackbarDontAdded = true;

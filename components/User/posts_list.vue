@@ -78,9 +78,11 @@
         v-for="(coment, index) of comments"
         :key="index"
         :coment="coment"
+        @editedComment="editedpost"
+        @deleteComment="deleteComment"
       />
 
-      <comment-field :idPost="user._id" />
+      <comment-field :idPost="user._id" @commentsAdd="addedComment" />
     </section>
   </section>
 </template>
@@ -128,6 +130,20 @@ export default {
       );
       const index = this.user_posts.findIndex((el) => el._id === postId);
       this.user_posts.splice(index, 1, currentPost.data.data);
+    },
+    editedpost(comment) {
+      const index = this.comments.findIndex((el) => el._id === comment._id);
+      this.comments.splice(index, 1, comment);
+    },
+    addedComment(comment) {
+      this.comments.push(comment);
+    },
+    async deleteComment(id) {
+      await api.deleteComment(id);
+      this.comments.splice(
+        this.comments.findIndex((el) => el._id === id),
+        1
+      );
     },
   },
 };

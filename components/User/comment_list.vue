@@ -89,18 +89,16 @@ export default {
       this.arrEditedComments.push(coment);
     },
     async saveEditComment(id, description) {
-      await api.editComment(id, { description });
+      const editedPost = await api.editComment(id, { description });
       this.arrEditedComments.splice(
         this.arrEditedComments.findIndex((el) => el._id === this.coment._id),
         1
       );
+
+      this.$emit('editedComment', editedPost.data.data);
     },
-    async deleteComment(id) {
-      await api.deleteComment(id);
-      this.comments.splice(
-        this.comments.findIndex((el) => el._id === id),
-        1
-      );
+    deleteComment(id) {
+      this.$emit('deleteComment', id);
     },
   },
 };
