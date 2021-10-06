@@ -157,9 +157,47 @@
           </v-card>
         </v-tab-item>
 
+        <v-tab-item v-if="$store.state.user.user._id === $route.params.id">
+          <v-card>
+            <v-card-title>
+              <v-text-field
+                v-model="search"
+                append-icon="mdi-magnify"
+                label="Search"
+                single-line
+                hide-details
+              ></v-text-field>
+            </v-card-title>
+            <v-data-table
+              :headers="headers"
+              :search="search"
+              :items="sentBy"
+            ></v-data-table>
+          </v-card>
+        </v-tab-item>
+
+        <v-tab-item v-if="$store.state.user.user._id === $route.params.id">
+          <h1>Отримані</h1>
+          <v-card>
+            <v-card-title>
+              <v-text-field
+                v-model="search"
+                append-icon="mdi-magnify"
+                label="Search"
+                single-line
+                hide-details
+              ></v-text-field>
+            </v-card-title>
+            <v-data-table
+              :headers="headers"
+              :search="search2"
+              :items="acceptedBy"
+            ></v-data-table>
+          </v-card>
+        </v-tab-item>
         <!-- // TODO добавити відображення настройок тільки на власному профілі, в created провіряти чи профіль є користувача 
         і якщо користуваа то пушити в масив itemsMenu.push('Settings') і відображати це меню а при переході на цей пункт робити запит по АПІ і на бекенді тоже профіряти чи профіль є користувача. -->
-        <v-tab-item>
+        <v-tab-item v-if="$store.state.user.user._id === $route.params.id">
           <v-card flat class="d-flex flex-wrap justify-space-around">
             <h1>Settings page</h1>
           </v-card>
@@ -189,6 +227,9 @@ export default {
     addFav: 'Add user to "favorites"',
     addFriend: 'Add user to friends',
     isFavorited: null,
+    isFriend: null,
+    acceptedBy: null,
+    sentBy: null,
     items: [
       { title: 'Click Me' },
       { title: 'Click Me' },
@@ -197,7 +238,32 @@ export default {
     tab: null,
     itemsMenu: ['Main', 'Friends'],
     length: 5,
-    rating: 3.5,
+
+    search: '',
+    headers: [
+      {
+        text: 'Email',
+        align: 'start',
+        filterable: false,
+        value: 'acceptedBy.email',
+      },
+      { text: "Ім'я", value: 'acceptedBy.firstName' },
+      { text: 'Прізвище', value: 'acceptedBy.lastName' },
+      { text: 'Коли', value: 'createdAt' },
+    ],
+
+    search2: '',
+    headers2: [
+      {
+        text: 'Email',
+        align: 'start',
+        filterable: false,
+        value: 'sentBy.email',
+      },
+      { text: "Ім'я", value: 'sentBy.firstName' },
+      { text: 'Прізвище', value: 'sentBy.lastName' },
+      { text: 'Коли', value: 'createdAt' },
+    ],
   }),
   head() {
     return {
@@ -211,17 +277,6 @@ export default {
         },
       ],
     };
-  },
-  computed: {
-    // TODO добавити сюди логіку провірки чи є користувач другом / у ибраному
-    isFriend() {
-      return true;
-    },
-    // isFavorited() {
-    //   return this.thisUser
-    //     ? this.thisUser.favorites.includes(this.userData._id, 0)
-    //     : false;
-    // },
   },
   async created() {
     if (this.$route.params.id) {
@@ -240,6 +295,23 @@ export default {
         .getCurrentUser(this.$store.state.user.user._id)
         .then((res) => res.data.user);
       this.isFavorited = this.thisUser.favorites.includes(this.userData._id, 0);
+
+      this.acceptedBy = await api
+        .applicationsToFriends(`acceptedBy=${this.$store.state.user.user._id}`)
+        .then((data) => data.data.result);
+      console.log(this.acceptedBy);
+      this.sentBy = await api
+        .applicationsToFriends(`sentBy=${this.$store.state.user.user._id}`)
+        .then((data) => data.data.result);
+      console.log(this.sentBy);
+    }
+    if (
+      this.$route.params.id &&
+      this.$store.state.user.user &&
+      this.$store.state.user.user._id &&
+      this.$store.state.user.user._id === this.$route.params.id
+    ) {
+      this.itemsMenu.push('Requests', 'Sent', 'Settings');
     }
   },
   methods: {
@@ -252,7 +324,7 @@ export default {
       this.user_posts.unshift(post.data.data);
       this.descriptionPost = '';
     },
-    // TODO добавити логіку добавлення в друзі та вибране
+    // TODO добавити логіку добавлення в друзі
     async addToFavorites() {
       if (this.isFavorited) {
         await api.deleteFromFavorite(this.$route.params.id);
@@ -262,11 +334,13 @@ export default {
         this.isFavorited = true;
       }
     },
-    addToFriends() {
+    async addToFriends() {
       if (this.isFriend) {
         console.log('deleted from friends');
+        this.isFriend = false;
       } else {
-        console.log('added to friends');
+        await api.addToFriends(this.$route.params.id);
+        this.isFriend = true;
       }
     },
   },

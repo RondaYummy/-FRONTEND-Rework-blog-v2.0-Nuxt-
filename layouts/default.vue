@@ -7,8 +7,8 @@
       </nuxt-link>
 
       <search-form />
-
       <v-spacer />
+
       <authComponent v-if="!loginIn" />
       <v-badge
         v-if="loginIn"
@@ -139,6 +139,7 @@ export default {
       return this.$store.state.user.user;
     },
   },
+
   watch: {
     user() {
       this.loginIn = true;
@@ -147,6 +148,9 @@ export default {
     group() {
       this.drawer = false;
     },
+  },
+  async created() {
+    // TODO логіку підгрузки чи є заявки в друзі
   },
   methods: {
     async logout(id) {

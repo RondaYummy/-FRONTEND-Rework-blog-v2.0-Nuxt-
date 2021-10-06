@@ -28,6 +28,7 @@ export default {
     return axios.post('/signin', v).then((data) => {
       sessionStorage.setItem('access', data.data.updatedToken.accessToken);
       localStorage.setItem('refresh', data.data.updatedToken.refreshToken);
+      // TODO записую
       return data;
     });
   },
@@ -46,14 +47,19 @@ export default {
   deleteFromFavorite(id) {
     return axios.delete(`/user/${id}/favorite`);
   },
-  // addToFriends(id) {
-  // return axios.post(`/user/${id}/friends`);
-  // },
+  addToFriends(id) {
+    return axios.post(`/user/${id}/friends`);
+  },
+  AcceptFriends(id) {
+    return axios.post(`/user/friends/accept/${id}`);
+  },
+  applicationsToFriends(v) {
+    return axios.get(`/user/friend-requests?${v}`);
+  },
   addpost(id, v) {
     return axios.post(`/user/${id}/posts`, v);
   },
   deletePost(id) {
-    // TODO видаляти також всі коменти доробити
     return axios.delete(`/posts/${id}`);
   },
   editPost(id, v) {
