@@ -50,11 +50,20 @@ export default {
   addToFriends(id) {
     return axios.post(`/user/${id}/friends`);
   },
-  AcceptFriends(id) {
+  AcceptFriend(id) {
     return axios.post(`/user/friends/accept/${id}`);
+  },
+  cancelFriendRequest(id) {
+    return axios.post(`/user/friends/cancel/${id}`);
+  },
+  rejectFriendRequest(id) {
+    return axios.post(`/user/friends/reject/${id}`);
   },
   applicationsToFriends(v) {
     return axios.get(`/user/friend-requests?${v}`);
+  },
+  deleteFriend(id) {
+    return axios.delete(`/user/friends/${id}/remove`)
   },
   addpost(id, v) {
     return axios.post(`/user/${id}/posts`, v);

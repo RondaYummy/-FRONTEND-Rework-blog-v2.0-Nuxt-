@@ -82,6 +82,15 @@
         <span> {{ isFriend ? delFriend : addFriend }}</span>
       </v-tooltip>
 
+      <v-snackbar v-model="friendAdded" :timeout="4000">
+        {{ friendAddedText }}
+        <template #action="{ attrs }">
+          <v-btn color="green" text v-bind="attrs" @click="friendAdded = false">
+            Ok
+          </v-btn>
+        </template>
+      </v-snackbar>
+
       <template #extension>
         <v-tabs v-model="tab" align-with-title>
           <v-tab v-for="item in itemsMenu" :key="item">
@@ -105,7 +114,7 @@
                   <v-row no-gutters>
                     <v-col cols="4"> Write a post? </v-col>
                     <v-col cols="8" class="text--secondary">
-                      <v-fade-transition leave-absolute>
+                      <e-transitionv-fad leave-absolute>
                         <span v-if="open && $store.state.user.user._id" key="0">
                           To add press "Enter"
                         </span>
@@ -119,7 +128,7 @@
                         <span v-else key="1">
                           {{ descriptionPost }}
                         </span>
-                      </v-fade-transition>
+                      </e-transitionv-fad>
                     </v-col>
                   </v-row>
                 </template>
@@ -130,7 +139,8 @@
                   :disabled="!$store.state.user.user._id"
                   placeholder="Write a post here..."
                   @keydown.enter="addPost"
-                ></v-text-field>
+                >
+                </v-text-field>
               </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
@@ -159,6 +169,7 @@
 
         <v-tab-item v-if="$store.state.user.user._id === $route.params.id">
           <v-card>
+            <h1>Надіслані</h1>
             <v-card-title>
               <v-text-field
                 v-model="search"
@@ -166,13 +177,16 @@
                 label="Search"
                 single-line
                 hide-details
-              ></v-text-field>
+              >
+              </v-text-field>
             </v-card-title>
-            <v-data-table
-              :headers="headers"
-              :search="search"
-              :items="sentBy"
-            ></v-data-table>
+            <v-data-table :headers="headers" :search="search" :items="sentBy">
+              <template #[`item.actions`]="{ item }">
+                <v-icon small class="mr-2" @click="cancelFriendRequest(item)">
+                  mdi-cancel
+                </v-icon>
+              </template>
+            </v-data-table>
           </v-card>
         </v-tab-item>
 
@@ -186,13 +200,24 @@
                 label="Search"
                 single-line
                 hide-details
-              ></v-text-field>
+              >
+              </v-text-field>
             </v-card-title>
             <v-data-table
-              :headers="headers"
+              :headers="headers2"
               :search="search2"
               :items="acceptedBy"
-            ></v-data-table>
+              item-key="acceptedBy.email"
+            >
+              <template #[`item.actions`]="{ item }">
+                <v-icon small class="mr-2" @click="acceptsFriend(item)">
+                  mdi-account-multiple-plus
+                </v-icon>
+                <v-icon small @click="rejectFriendRequest(item)">
+                  mdi-account-multiple-minus
+                </v-icon>
+              </template>
+            </v-data-table>
           </v-card>
         </v-tab-item>
         <!-- // TODO добавити відображення настройок тільки на власному профілі, в created провіряти чи профіль є користувача 
@@ -230,6 +255,8 @@ export default {
     isFriend: null,
     acceptedBy: null,
     sentBy: null,
+    friendAdded: false,
+    friendAddedText: '',
     items: [
       { title: 'Click Me' },
       { title: 'Click Me' },
@@ -250,6 +277,7 @@ export default {
       { text: "Ім'я", value: 'acceptedBy.firstName' },
       { text: 'Прізвище', value: 'acceptedBy.lastName' },
       { text: 'Коли', value: 'createdAt' },
+      { text: 'Actions', value: 'actions', sortable: false },
     ],
 
     search2: '',
@@ -263,6 +291,7 @@ export default {
       { text: "Ім'я", value: 'sentBy.firstName' },
       { text: 'Прізвище', value: 'sentBy.lastName' },
       { text: 'Коли', value: 'createdAt' },
+      { text: 'Actions', value: 'actions', sortable: false },
     ],
   }),
   head() {
@@ -298,13 +327,14 @@ export default {
 
       this.acceptedBy = await api
         .applicationsToFriends(`acceptedBy=${this.$store.state.user.user._id}`)
-        .then((data) => data.data.result);
+        .then((data) => data.data.arrayApplicationsToFriends);
       console.log(this.acceptedBy);
       this.sentBy = await api
         .applicationsToFriends(`sentBy=${this.$store.state.user.user._id}`)
-        .then((data) => data.data.result);
+        .then((data) => data.data.arrayApplicationsToFriends);
       console.log(this.sentBy);
     }
+
     if (
       this.$route.params.id &&
       this.$store.state.user.user &&
@@ -324,7 +354,7 @@ export default {
       this.user_posts.unshift(post.data.data);
       this.descriptionPost = '';
     },
-    // TODO добавити логіку добавлення в друзі
+
     async addToFavorites() {
       if (this.isFavorited) {
         await api.deleteFromFavorite(this.$route.params.id);
@@ -336,12 +366,32 @@ export default {
     },
     async addToFriends() {
       if (this.isFriend) {
-        console.log('deleted from friends');
+        await api.deleteFriend(this.$route.params.id).catch((error) => {
+          if (error.response.status === 404) {
+            this.friendAdded = true;
+            this.friendAddedText =
+              'Користувач ще не прийняв ваше запрошення у друзі.';
+          }
+        });
         this.isFriend = false;
       } else {
-        await api.addToFriends(this.$route.params.id);
+        await api.addToFriends(this.$route.params.id).catch((error) => {
+          if (error.response.status === 403) {
+            this.friendAdded = true;
+            this.friendAddedText = 'Ви уже надіслали заявку користувачу.';
+          }
+        });
         this.isFriend = true;
       }
+    },
+    async rejectFriendRequest(user) {
+      await api.rejectFriendRequest(user._id);
+    },
+    async acceptsFriend(user) {
+      await api.AcceptFriend(user._id);
+    },
+    async cancelFriendRequest(user) {
+      await api.cancelFriendRequest(user._id);
     },
   },
 };

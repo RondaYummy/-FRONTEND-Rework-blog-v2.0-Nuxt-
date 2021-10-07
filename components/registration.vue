@@ -25,7 +25,7 @@
             @keydown.enter="confirmEmailAndPass"
           ></v-text-field>
           <span class="text-caption grey--text text--darken-1">
-            This is the email you will use to login to your Nikki - Nails
+            This is the email you will use to login to your Nikki - BLOG
             account
           </span>
         </v-card-text>

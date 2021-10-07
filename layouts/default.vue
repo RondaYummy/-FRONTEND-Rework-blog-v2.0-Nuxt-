@@ -149,9 +149,6 @@ export default {
       this.drawer = false;
     },
   },
-  async created() {
-    // TODO логіку підгрузки чи є заявки в друзі
-  },
   methods: {
     async logout(id) {
       await api.logout(id);
