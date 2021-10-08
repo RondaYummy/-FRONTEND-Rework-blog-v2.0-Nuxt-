@@ -160,10 +160,11 @@
 
         <v-tab-item>
           <v-card flat class="d-flex flex-wrap justify-space-around">
-            <friend-list />
-            <friend-list />
-            <friend-list />
-            <friend-list />
+            <friend-list
+              v-for="friend in userData.friends"
+              :key="friend._id"
+              :friend="friend"
+            />
           </v-card>
         </v-tab-item>
 
@@ -182,9 +183,20 @@
             </v-card-title>
             <v-data-table :headers="headers" :search="search" :items="sentBy">
               <template #[`item.actions`]="{ item }">
-                <v-icon small class="mr-2" @click="cancelFriendRequest(item)">
-                  mdi-cancel
-                </v-icon>
+                <v-tooltip bottom>
+                  <template #activator="{ on, attrs }">
+                    <v-icon
+                      class="mr-2"
+                      v-bind="attrs"
+                      color="red"
+                      v-on="on"
+                      @click="cancelFriendRequest(item)"
+                    >
+                      mdi-cancel
+                    </v-icon>
+                  </template>
+                  <span>Відмінити</span>
+                </v-tooltip>
               </template>
             </v-data-table>
           </v-card>
@@ -210,12 +222,33 @@
               item-key="acceptedBy.email"
             >
               <template #[`item.actions`]="{ item }">
-                <v-icon small class="mr-2" @click="acceptsFriend(item)">
-                  mdi-account-multiple-plus
-                </v-icon>
-                <v-icon small @click="rejectFriendRequest(item)">
-                  mdi-account-multiple-minus
-                </v-icon>
+                <v-tooltip bottom>
+                  <template #activator="{ on, attrs }">
+                    <v-icon
+                      class="mr-2"
+                      color="green"
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="acceptsFriend(item)"
+                    >
+                      mdi-account-multiple-plus
+                    </v-icon>
+                  </template>
+                  <span>Підтвердити</span>
+                </v-tooltip>
+                <v-tooltip bottom>
+                  <template #activator="{ on, attrs }">
+                    <v-icon
+                      v-bind="attrs"
+                      color="red"
+                      @click="rejectFriendRequest(item)"
+                      v-on="on"
+                    >
+                      mdi-account-multiple-minus
+                    </v-icon>
+                  </template>
+                  <span>Відхилити</span>
+                </v-tooltip>
               </template>
             </v-data-table>
           </v-card>
@@ -324,15 +357,6 @@ export default {
         .getCurrentUser(this.$store.state.user.user._id)
         .then((res) => res.data.user);
       this.isFavorited = this.thisUser.favorites.includes(this.userData._id, 0);
-
-      this.acceptedBy = await api
-        .applicationsToFriends(`acceptedBy=${this.$store.state.user.user._id}`)
-        .then((data) => data.data.arrayApplicationsToFriends);
-      console.log(this.acceptedBy);
-      this.sentBy = await api
-        .applicationsToFriends(`sentBy=${this.$store.state.user.user._id}`)
-        .then((data) => data.data.arrayApplicationsToFriends);
-      console.log(this.sentBy);
     }
 
     if (
@@ -342,6 +366,12 @@ export default {
       this.$store.state.user.user._id === this.$route.params.id
     ) {
       this.itemsMenu.push('Requests', 'Sent', 'Settings');
+      this.acceptedBy = await api
+        .applicationsToFriends(`acceptedBy=${this.$store.state.user.user._id}`)
+        .then((data) => data.data.arrayApplicationsToFriends);
+      this.sentBy = await api
+        .applicationsToFriends(`sentBy=${this.$store.state.user.user._id}`)
+        .then((data) => data.data.arrayApplicationsToFriends);
     }
   },
   methods: {
@@ -386,12 +416,24 @@ export default {
     },
     async rejectFriendRequest(user) {
       await api.rejectFriendRequest(user._id);
+      this.acceptedBy.splice(
+        this.acceptedBy.findIndex((el) => el._id === user._id),
+        1
+      );
     },
     async acceptsFriend(user) {
       await api.AcceptFriend(user._id);
+      this.acceptedBy.splice(
+        this.acceptedBy.findIndex((el) => el._id === user._id),
+        1
+      );
     },
     async cancelFriendRequest(user) {
       await api.cancelFriendRequest(user._id);
+      this.sentBy.splice(
+        this.sentBy.findIndex((el) => el._id === user._id),
+        1
+      );
     },
   },
 };

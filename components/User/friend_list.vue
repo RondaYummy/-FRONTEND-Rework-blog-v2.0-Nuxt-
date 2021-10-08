@@ -23,15 +23,37 @@
                 <v-icon>mdi-dots-vertical</v-icon>
               </v-btn>
             </v-card-title>
-
             <v-spacer></v-spacer>
 
             <v-card-title class="white--text pl-12 pt-12">
-              <div class="text-h4 pl-12 pt-12">Ali Conners</div>
+              <div class="text-h4 pl-12 pt-12">
+                <!-- {{ friend.firstName }} {{ friend.lastName }} -->
+              </div>
             </v-card-title>
           </v-row>
         </v-img>
 
+        <v-list-item>
+          <v-list-item-icon>
+            <v-icon color="indigo"> mdi-card-account-details-outline </v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>
+              {{ friend.firstName }} {{ friend.lastName }}
+            </v-list-item-title>
+            <v-list-item-subtitle
+              >Created: {{ friend.createdAt | normalizeDate }}
+            </v-list-item-subtitle>
+          </v-list-item-content>
+
+          <v-list-item-action>
+            <v-icon v-if="friend.gender === 'Male'">mdi-human-male</v-icon>
+            <v-icon v-else-if="friend.gender === 'Female'">
+              mdi-human-female
+            </v-icon>
+          </v-list-item-action>
+        </v-list-item>
         <v-list two-line>
           <v-list-item>
             <v-list-item-icon>
@@ -39,21 +61,8 @@
             </v-list-item-icon>
 
             <v-list-item-content>
-              <v-list-item-title>(650) 555-1234</v-list-item-title>
+              <v-list-item-title>{{ friend.phone }}</v-list-item-title>
               <v-list-item-subtitle>Mobile</v-list-item-subtitle>
-            </v-list-item-content>
-
-            <v-list-item-icon>
-              <v-icon>mdi-message-text</v-icon>
-            </v-list-item-icon>
-          </v-list-item>
-
-          <v-list-item>
-            <v-list-item-action></v-list-item-action>
-
-            <v-list-item-content>
-              <v-list-item-title>(323) 555-6789</v-list-item-title>
-              <v-list-item-subtitle>Work</v-list-item-subtitle>
             </v-list-item-content>
 
             <v-list-item-icon>
@@ -69,29 +78,21 @@
             </v-list-item-icon>
 
             <v-list-item-content>
-              <v-list-item-title>aliconnors@example.com</v-list-item-title>
+              <v-list-item-title>{{ friend.email }}</v-list-item-title>
               <v-list-item-subtitle>Personal</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
 
-          <v-list-item>
-            <v-list-item-action></v-list-item-action>
-
-            <v-list-item-content>
-              <v-list-item-title>ali_connors@example.com</v-list-item-title>
-              <v-list-item-subtitle>Work</v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-
           <v-divider inset></v-divider>
-
           <v-list-item>
             <v-list-item-icon>
               <v-icon color="indigo"> mdi-map-marker </v-icon>
             </v-list-item-icon>
 
             <v-list-item-content>
-              <v-list-item-title>1400 Main Street</v-list-item-title>
+              <v-list-item-title>{{
+                friend.age | formatDate
+              }}</v-list-item-title>
               <v-list-item-subtitle>Orlando, FL 79938</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
@@ -100,3 +101,9 @@
     </template>
   </v-hover>
 </template>
+
+<script>
+export default {
+  props: ['friend'],
+};
+</script>
