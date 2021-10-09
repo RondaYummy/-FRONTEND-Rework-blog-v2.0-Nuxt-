@@ -160,11 +160,7 @@
 
         <v-tab-item>
           <v-card flat class="d-flex flex-wrap justify-space-around">
-            <friend-list
-              v-for="friend in userData.friends"
-              :key="friend._id"
-              :friend="friend"
-            />
+            <friend-list :friends="userData.friends" />
           </v-card>
         </v-tab-item>
 

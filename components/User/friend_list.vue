@@ -1,109 +1,131 @@
 <template>
-  <v-hover>
-    <template #default="{ hover }">
-      <v-card max-width="310" class="mx-auto ma-3" :elevation="hover ? 24 : 6">
-        <v-img
-          src="https://cdn.vuetifyjs.com/images/lists/ali.png"
-          height="200px"
-          dark
+  <section class="select">
+    <v-row class="pa-4" justify="space-between">
+      <v-col cols="6">
+        <v-treeview
+          :active.sync="active"
+          :items="items"
+          :load-children="fetchUsers"
+          :open.sync="open"
+          activatable
+          color="warning"
+          open-on-click
+          transition
         >
-          <v-row class="fill-height">
-            <v-card-title>
-              <v-btn dark icon>
-                <v-icon>mdi-chevron-left</v-icon>
-              </v-btn>
+          <template #prepend="{ item }">
+            <v-icon v-if="!item.children"> mdi-account </v-icon>
+          </template>
+        </v-treeview>
+      </v-col>
 
-              <v-spacer></v-spacer>
+      <v-divider vertical></v-divider>
 
-              <v-btn dark icon class="mr-4">
-                <v-icon>mdi-pencil</v-icon>
-              </v-btn>
-
-              <v-btn dark icon>
-                <v-icon>mdi-dots-vertical</v-icon>
-              </v-btn>
-            </v-card-title>
-            <v-spacer></v-spacer>
-
-            <v-card-title class="white--text pl-12 pt-12">
-              <div class="text-h4 pl-12 pt-12">
-                <!-- {{ friend.firstName }} {{ friend.lastName }} -->
+      <v-col class="d-flex text-center" cols="6">
+        <v-scroll-y-transition mode="out-in">
+          <div
+            v-if="!selected"
+            class="text-h6 grey--text text--lighten-1 font-weight-light"
+            style="align-self: center"
+          >
+            Select a User
+          </div>
+          <v-card
+            v-else
+            :key="selected._id"
+            class="pt-6 mx-auto"
+            flat
+            max-width="400"
+          >
+            <v-card-text>
+              <v-avatar v-if="avatar" size="88">
+                <v-img
+                  :src="`https://avataaars.io/${avatar}`"
+                  class="mb-6"
+                ></v-img>
+              </v-avatar>
+              <div class="blue--text subheading font-weight-bold">
+                {{ selected.firstName }}
               </div>
-            </v-card-title>
-          </v-row>
-        </v-img>
-
-        <v-list-item>
-          <v-list-item-icon>
-            <v-icon color="indigo"> mdi-card-account-details-outline </v-icon>
-          </v-list-item-icon>
-
-          <v-list-item-content>
-            <v-list-item-title>
-              {{ friend.firstName }} {{ friend.lastName }}
-            </v-list-item-title>
-            <v-list-item-subtitle
-              >Created: {{ friend.createdAt | normalizeDate }}
-            </v-list-item-subtitle>
-          </v-list-item-content>
-
-          <v-list-item-action>
-            <v-icon v-if="friend.gender === 'Male'">mdi-human-male</v-icon>
-            <v-icon v-else-if="friend.gender === 'Female'">
-              mdi-human-female
-            </v-icon>
-          </v-list-item-action>
-        </v-list-item>
-        <v-list two-line>
-          <v-list-item>
-            <v-list-item-icon>
-              <v-icon color="indigo"> mdi-phone </v-icon>
-            </v-list-item-icon>
-
-            <v-list-item-content>
-              <v-list-item-title>{{ friend.phone }}</v-list-item-title>
-              <v-list-item-subtitle>Mobile</v-list-item-subtitle>
-            </v-list-item-content>
-
-            <v-list-item-icon>
-              <v-icon>mdi-message-text</v-icon>
-            </v-list-item-icon>
-          </v-list-item>
-
-          <v-divider inset></v-divider>
-
-          <v-list-item>
-            <v-list-item-icon>
-              <v-icon color="indigo"> mdi-email </v-icon>
-            </v-list-item-icon>
-
-            <v-list-item-content>
-              <v-list-item-title>{{ friend.email }}</v-list-item-title>
-              <v-list-item-subtitle>Personal</v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-
-          <v-divider inset></v-divider>
-          <v-list-item>
-            <v-list-item-icon>
-              <v-icon color="indigo"> mdi-map-marker </v-icon>
-            </v-list-item-icon>
-
-            <v-list-item-content>
-              <v-list-item-title>{{
-                friend.age | formatDate
-              }}</v-list-item-title>
-              <v-list-item-subtitle>Orlando, FL 79938</v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-      </v-card>
-    </template>
-  </v-hover>
+              <h3 class="text-h5 mb-2">
+                {{ selected.lastName }}
+              </h3>
+              <div class="blue--text mb-2">
+                {{ selected.email }}
+              </div>
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-row class="text-left" tag="v-card-text">
+              <v-col class="text-right mr-4 mb-2" tag="strong" cols="5">
+                Gender:
+              </v-col>
+              <v-col>{{ selected.gender }}</v-col>
+              <v-col class="text-right mr-4 mb-2" tag="strong" cols="5">
+                Created:
+              </v-col>
+              <v-col>
+                {{ selected.createdAt | formatDate }}
+              </v-col>
+              <v-col class="text-right mr-4 mb-2" tag="strong" cols="5">
+                Phone:
+              </v-col>
+              <v-col>{{ selected.phone }}</v-col>
+            </v-row>
+          </v-card>
+        </v-scroll-y-transition>
+      </v-col>
+    </v-row>
+  </section>
 </template>
 
 <script>
+const avatars = [
+  '?accessoriesType=Blank&avatarStyle=Circle&clotheColor=PastelGreen&clotheType=ShirtScoopNeck&eyeType=Wink&eyebrowType=UnibrowNatural&facialHairColor=Black&facialHairType=MoustacheMagnum&hairColor=Platinum&mouthType=Concerned&skinColor=Tanned&topType=Turban',
+  '?accessoriesType=Kurt&avatarStyle=Circle&clotheColor=Gray01&clotheType=BlazerShirt&eyeType=Surprised&eyebrowType=Default&facialHairColor=Red&facialHairType=Blank&graphicType=Selena&hairColor=Red&hatColor=Blue02&mouthType=Twinkle&skinColor=Pale&topType=LongHairCurly',
+];
+
 export default {
-  props: ['friend'],
+  props: ['friends'],
+  data: () => ({
+    active: [],
+    avatar: null,
+    open: [],
+    users: [],
+  }),
+  computed: {
+    items() {
+      return [
+        {
+          name: 'Friends',
+          children: this.users,
+        },
+      ];
+    },
+    selected() {
+      if (!this.active.length) return undefined;
+
+      const id = this.active[0];
+
+      return this.users.find((user) => user.id === id);
+    },
+  },
+
+  watch: {
+    selected: 'randomAvatar',
+  },
+
+  methods: {
+    fetchUsers(item) {
+      return item.children.push(...this.friends);
+    },
+    randomAvatar() {
+      this.avatar = this.selected.gender === 'Female' ? avatars[1] : avatars[0];
+    },
+  },
 };
 </script>
+
+<style lang="scss" scoped>
+.select {
+  min-width: 90%;
+}
+</style>
